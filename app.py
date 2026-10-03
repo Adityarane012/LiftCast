@@ -61,11 +61,23 @@ st.set_page_config(
 
 CUSTOM_CSS = """
 <style>
-/* Modern typography & background */
+/* Modern typography & base canvas contrast overrides */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-html, body, [class*="css"] {
+html, body, [class*="css"], [data-testid="stAppViewContainer"] {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #080C14 !important;
+    color: #F8FAFC !important;
+}
+
+[data-testid="stHeader"] {
+    background-color: rgba(8, 12, 20, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+}
+
+[data-testid="stSidebar"] {
+    background-color: #0B1120 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
 code, pre, .mono {
@@ -74,26 +86,26 @@ code, pre, .mono {
 
 /* Glassmorphic cards */
 .glass-panel {
-    background: rgba(17, 24, 39, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(17, 24, 39, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-radius: 14px;
     padding: 1.25rem 1.5rem;
     margin-bottom: 1.25rem;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
 }
 
 .glass-metric {
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(30, 41, 59, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 1rem 1.2rem;
     text-align: left;
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 .glass-metric:hover {
-    border-color: rgba(56, 189, 248, 0.3);
+    border-color: rgba(56, 189, 248, 0.5);
     transform: translateY(-2px);
 }
 
@@ -101,30 +113,30 @@ code, pre, .mono {
     font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #94a3b8;
+    color: #94A3B8;
     margin-bottom: 0.35rem;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .metric-val {
-    font-size: 1.65rem;
+    font-size: 1.75rem;
     font-weight: 800;
-    color: #f8fafc;
+    color: #FFFFFF;
     line-height: 1.2;
 }
 
 .metric-sub {
-    font-size: 0.8rem;
-    color: #64748b;
+    font-size: 0.82rem;
+    color: #94A3B8;
     margin-top: 0.25rem;
 }
 
-/* Badges */
+/* High contrast badges */
 .badge {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.25rem 0.65rem;
+    padding: 0.28rem 0.75rem;
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 700;
@@ -132,55 +144,125 @@ code, pre, .mono {
 }
 
 .badge-emerald {
-    background: rgba(16, 185, 129, 0.15);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.2);
+    color: #34D399;
+    border: 1px solid rgba(52, 211, 153, 0.4);
 }
 
 .badge-cyan {
-    background: rgba(6, 182, 212, 0.15);
-    color: #38bdf8;
-    border: 1px solid rgba(6, 182, 212, 0.3);
+    background: rgba(6, 182, 212, 0.2);
+    color: #38BDF8;
+    border: 1px solid rgba(56, 189, 248, 0.4);
 }
 
 .badge-rose {
-    background: rgba(244, 63, 94, 0.15);
-    color: #fb7185;
-    border: 1px solid rgba(244, 63, 94, 0.3);
+    background: rgba(244, 63, 94, 0.2);
+    color: #FB7185;
+    border: 1px solid rgba(251, 113, 133, 0.4);
 }
 
 .badge-amber {
-    background: rgba(245, 158, 11, 0.15);
-    color: #fbbf24;
-    border: 1px solid rgba(245, 158, 11, 0.3);
+    background: rgba(245, 158, 11, 0.2);
+    color: #FBBF24;
+    border: 1px solid rgba(251, 191, 36, 0.4);
 }
 
 .badge-violet {
-    background: rgba(139, 92, 246, 0.15);
-    color: #c084fc;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: rgba(139, 92, 246, 0.2);
+    color: #C084FC;
+    border: 1px solid rgba(192, 132, 252, 0.4);
 }
 
-/* Hero text gradient */
+/* Hero text styling */
 .hero-title {
-    font-size: 2.1rem;
+    font-size: 2.15rem;
     font-weight: 800;
     letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #FFFFFF !important;
     margin-bottom: 0.25rem;
 }
 
 .hero-subtitle {
-    color: #94a3b8;
-    font-size: 0.95rem;
+    color: #94A3B8 !important;
+    font-size: 0.98rem;
+    line-height: 1.5;
     margin-bottom: 1.25rem;
+}
+
+/* Keyboard hint badge */
+.kbd-hint {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 0.72rem;
+    font-family: monospace;
+    color: #CBD5E1;
+    margin-left: 6px;
+}
+
+/* Audio equalizer wave animation */
+.audio-equalizer {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 18px;
+    margin-left: 8px;
+}
+.eq-bar {
+    width: 3px;
+    background: #38BDF8;
+    border-radius: 2px;
+    animation: eq-bounce 1.2s infinite ease-in-out alternate;
+}
+.eq-bar:nth-child(1) { height: 6px; animation-delay: 0.1s; }
+.eq-bar:nth-child(2) { height: 16px; animation-delay: 0.3s; }
+.eq-bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+.eq-bar:nth-child(4) { height: 14px; animation-delay: 0.4s; }
+.eq-bar:nth-child(5) { height: 8px; animation-delay: 0.15s; }
+@keyframes eq-bounce {
+    0% { height: 4px; }
+    100% { height: 18px; }
 }
 </style>
 """
 
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+
+
+def play_audio_chime(sound_type: str = "success") -> None:
+    """Synthesize immediate browser Web Audio API tone without external media files."""
+    if not st.session_state.get("audio_chime_enabled", True):
+        return
+    freqs = "523.25, 659.25, 783.99" if sound_type == "success" else "440.0, 554.37"
+    components.html(
+        f"""
+        <script>
+        (function() {{
+            try {{
+                var AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                var ctx = new AudioContext();
+                var freqs = [{freqs}];
+                freqs.forEach(function(f, idx) {{
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = f;
+                    gain.gain.setValueAtTime(0.06, ctx.currentTime + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.16);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + idx * 0.08);
+                    osc.stop(ctx.currentTime + idx * 0.08 + 0.18);
+                }});
+            }} catch (_) {{}}
+        }})();
+        </script>
+        """,
+        height=0,
+        width=0,
+    )
 
 
 # -----------------------------------------------------------------------------
@@ -250,6 +332,43 @@ with st.sidebar:
         """,
         unsafe_allow_html=True,
     )
+
+    with st.expander("👓 Gym Ergonomics & Accessibility", expanded=False):
+        chalk_mode = st.toggle(
+            "🧤 Chalky Hands / Big Touch",
+            value=st.session_state.get("chalk_mode", False),
+            help="Enlarges buttons, inputs, and touch targets to 54px+ for gym floor usability with sweaty or chalky hands.",
+            key="chalk_mode",
+        )
+        audio_chime_toggle = st.toggle(
+            "🔔 Gym Audio Chimes",
+            value=st.session_state.get("audio_chime_enabled", True),
+            help="Synthesizes instant Web Audio confirmation tones on workout parse and save.",
+            key="audio_chime_enabled",
+        )
+
+    if st.session_state.get("chalk_mode", False):
+        st.markdown(
+            """
+            <style>
+            .stButton > button {
+                min-height: 56px !important;
+                font-size: 1.15rem !important;
+                font-weight: 800 !important;
+                border-radius: 12px !important;
+                border: 2px solid rgba(56, 189, 248, 0.4) !important;
+            }
+            input, textarea, select {
+                min-height: 50px !important;
+                font-size: 1.1rem !important;
+            }
+            .metric-val {
+                font-size: 2.1rem !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
 
     with st.expander("🎙️ ElevenLabs Voice (Optional)", expanded=False):
         st.text_input(
@@ -353,9 +472,17 @@ if page == "📝 10-Second Text Logger":
         key="raw_text_area",
     )
 
-    col_btn, col_info = st.columns([1, 3])
+    col_btn, col_info = st.columns([1, 2])
     with col_btn:
         parse_clicked = st.button("⚡ Parse with Gemma", type="primary", use_container_width=True)
+    with col_info:
+        st.markdown(
+            "<div style='display:flex; align-items:center; height:100%; padding-top:6px;'>"
+            "<span class='kbd-hint'>⚡ 10s Natural Language Parse</span>"
+            "<span class='badge badge-cyan' style='margin-left:6px;'>Zero Cloud Egress</span>"
+            "</div>",
+            unsafe_allow_html=True,
+        )
 
     if parse_clicked or "last_parse_result" in st.session_state:
         if parse_clicked:
@@ -366,6 +493,7 @@ if page == "📝 10-Second Text Logger":
                 st.session_state["last_parse_result"] = res
                 st.session_state["last_parse_time_ms"] = t_elapsed
                 st.session_state["last_raw_text"] = raw_text
+                play_audio_chime("success")
 
         parse_res = st.session_state["last_parse_result"]
         t_ms = st.session_state.get("last_parse_time_ms", 0.0)
@@ -447,6 +575,7 @@ if page == "📝 10-Second Text Logger":
                             f"✅ Successfully recorded {saved_count} sets for session {date_str}! Top sets updated."
                         )
                         st.balloons()
+                        play_audio_chime("success")
                         # Reset
                         if "last_parse_result" in st.session_state:
                             del st.session_state["last_parse_result"]
@@ -701,16 +830,37 @@ elif page == "📈 Lift Progress & Forecast":
             f"💡 **Stall-Aware Deload Target:** Since {selected_lift} has plateaued, consider a technical deload at **{deload_target:.1f} kg** (90% of working weight) or hold **{default_working_weight:.1f} kg** focusing on bar speed and technique."
         )
 
+    suggested_val = float(default_working_weight) if default_working_weight >= 20.0 else 60.0
+    if "plate_target_wt" not in st.session_state:
+        st.session_state["plate_target_wt"] = suggested_val
+
+    st.markdown("<span style='font-size:0.8rem; font-weight:700; color:#94a3b8;'>⚡ Quick Barbell Stepper (Chalk-Friendly):</span>", unsafe_allow_html=True)
+    st_c1, st_c2, st_c3, st_c4 = st.columns(4)
+    if st_c1.button("➖ 10 kg", key="step_sub_10", use_container_width=True):
+        st.session_state["plate_target_wt"] = max(20.0, round(st.session_state["plate_target_wt"] - 10.0, 1))
+        st.rerun()
+    if st_c2.button("➖ 2.5 kg", key="step_sub_2_5", use_container_width=True):
+        st.session_state["plate_target_wt"] = max(20.0, round(st.session_state["plate_target_wt"] - 2.5, 1))
+        st.rerun()
+    if st_c3.button("➕ 2.5 kg", key="step_add_2_5", use_container_width=True):
+        st.session_state["plate_target_wt"] = min(350.0, round(st.session_state["plate_target_wt"] + 2.5, 1))
+        st.rerun()
+    if st_c4.button("➕ 10 kg", key="step_add_10", use_container_width=True):
+        st.session_state["plate_target_wt"] = min(350.0, round(st.session_state["plate_target_wt"] + 10.0, 1))
+        st.rerun()
+
     col_target, col_bar, col_reps = st.columns([2, 1, 1])
     with col_target:
         target_wt = st.number_input(
             "Target Barbell Weight (kg)",
             min_value=15.0,
             max_value=350.0,
-            value=float(default_working_weight) if default_working_weight >= 20.0 else 60.0,
+            value=float(st.session_state["plate_target_wt"]),
             step=2.5,
+            key="input_target_wt_val",
             help="Total barbell weight (bar + plates on both sides).",
         )
+        st.session_state["plate_target_wt"] = target_wt
     with col_bar:
         bar_wt = st.selectbox(
             "Barbell Type",
@@ -869,10 +1019,37 @@ elif page == "🧠 Weekly Coach Recap":
             unsafe_allow_html=True,
         )
 
+        col_copy_btn, _ = st.columns([1, 2])
+        with col_copy_btn:
+            if st.button("📋 Copy Recap for Text/WhatsApp", use_container_width=True):
+                components.html(
+                    f"""
+                    <script>
+                    try {{
+                        navigator.clipboard.writeText({repr(result.summary)});
+                    }} catch (_) {{}}
+                    </script>
+                    """,
+                    height=0,
+                    width=0,
+                )
+                st.success("Copied to clipboard!")
+                play_audio_chime("success")
+
         # ---------------------------------------------------------------------
         # ElevenLabs Audio Briefing for Gym Earbuds
         # ---------------------------------------------------------------------
-        st.markdown("### 🔊 Coach Voice Briefing (Gym Earbuds)")
+        st.markdown(
+            """
+            <div style="display:flex; align-items:center; gap:0.5rem; margin-top:1.5rem; margin-bottom:0.25rem;">
+                <span style="font-size:1.3rem; font-weight:800; color:#f8fafc;">🔊 Coach Voice Briefing (Gym Earbuds)</span>
+                <div class="audio-equalizer">
+                    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         st.markdown(
             "<div style='font-size:0.85rem; color:#94a3b8; margin-bottom:0.75rem;'>"
             "Hands chalky? Packing your gym bag? Listen to a punchy 10-second recap generated from verified numbers."
