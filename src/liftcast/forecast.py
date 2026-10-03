@@ -243,6 +243,7 @@ class TabPFNForecaster:
                 pred_ratio = float(preds[0])
             except Exception as ex:
                 logger.warning("TabPFN fit/predict fallback: %s", ex)
+                self._tabpfn_model = None
                 model = None
 
         if model is None:

@@ -135,61 +135,63 @@ def build_forecasting_dataset(
     first_ever_date = df["dt"].min()
     rows = []
 
-    for idx, row in df.iterrows():
-        curr_dt = row["dt"]
-        curr_lift = row["exercise"]
-        curr_e1rm = float(row["top_e1rm"])
+    # Group by lift to build temporal features in linear O(N) time without repeated full scans
+    for curr_lift, lift_df in df.groupby("exercise"):
+        lift_df = lift_df.sort_values("dt").reset_index(drop=True)
+        prior_dates: list[pd.Timestamp] = []
+        prior_e1rms: list[float] = []
 
-        # Strictly prior sessions for this lift (temporal leakage prevention)
-        prior_lift_sessions = df[
-            (df["exercise"] == curr_lift) & (df["dt"] < curr_dt)
-        ].sort_values("dt")
+        for _, row in lift_df.iterrows():
+            curr_dt = row["dt"]
+            curr_e1rm = float(row["top_e1rm"])
 
-        n_priors = len(prior_lift_sessions)
-        if n_priors < min_prior_sessions:
-            continue
+            if len(prior_e1rms) < min_prior_sessions:
+                prior_dates.append(curr_dt)
+                prior_e1rms.append(curr_e1rm)
+                continue
 
-        prior_e1rms = prior_lift_sessions["top_e1rm"].values
-        prior_dates = prior_lift_sessions["dt"].values
+            best_so_far_prior = float(np.max(prior_e1rms))
+            prev_e1rm = float(prior_e1rms[-1])
+            prev_dt = prior_dates[-1]
 
-        best_so_far_prior = float(np.max(prior_e1rms))
-        prev_e1rm = float(prior_e1rms[-1])
-        prev_dt = pd.to_datetime(prior_dates[-1])
+            days_since_start = (curr_dt - first_ever_date).days
+            days_since_prev = (curr_dt - prev_dt).days
 
-        days_since_start = (curr_dt - first_ever_date).days
-        days_since_prev = (curr_dt - prev_dt).days
+            last_3 = prior_e1rms[-3:]
+            rollmean3 = float(np.mean(last_3))
 
-        # Rolling mean of last 3 prior sessions
-        last_3 = prior_e1rms[-3:]
-        rollmean3 = float(np.mean(last_3))
+            cutoff_14d = curr_dt - pd.Timedelta(days=14)
+            sessions_14d = sum(1 for d in prior_dates if d >= cutoff_14d)
 
-        # Sessions in prior 14 days [curr_dt - 14d, curr_dt)
-        cutoff_14d = curr_dt - pd.Timedelta(days=14)
-        sessions_14d = int(
-            (prior_lift_sessions["dt"] >= cutoff_14d).sum()
-        )
+            prev_ratio = prev_e1rm / best_so_far_prior if best_so_far_prior > 0 else 1.0
+            rollmean3_ratio = rollmean3 / best_so_far_prior if best_so_far_prior > 0 else 1.0
+            target_ratio = curr_e1rm / best_so_far_prior if best_so_far_prior > 0 else 1.0
 
-        prev_ratio = prev_e1rm / best_so_far_prior if best_so_far_prior > 0 else 1.0
-        rollmean3_ratio = rollmean3 / best_so_far_prior if best_so_far_prior > 0 else 1.0
-        target_ratio = curr_e1rm / best_so_far_prior if best_so_far_prior > 0 else 1.0
+            rows.append(
+                {
+                    "date": row["date"],
+                    "lift": curr_lift,
+                    "days_since_start": days_since_start,
+                    "days_since_prev": days_since_prev,
+                    "prev_ratio": prev_ratio,
+                    "rollmean3_ratio": rollmean3_ratio,
+                    "sessions_14d": sessions_14d,
+                    "prev_e1rm": prev_e1rm,
+                    "best_so_far_prior": best_so_far_prior,
+                    "target_ratio": target_ratio,
+                    "target_e1rm": curr_e1rm,
+                    "dt": curr_dt,
+                }
+            )
 
-        rows.append(
-            {
-                "date": row["date"],
-                "lift": curr_lift,
-                "days_since_start": days_since_start,
-                "days_since_prev": days_since_prev,
-                "prev_ratio": prev_ratio,
-                "rollmean3_ratio": rollmean3_ratio,
-                "sessions_14d": sessions_14d,
-                "prev_e1rm": prev_e1rm,
-                "best_so_far_prior": best_so_far_prior,
-                "target_ratio": target_ratio,
-                "target_e1rm": curr_e1rm,
-            }
-        )
+            prior_dates.append(curr_dt)
+            prior_e1rms.append(curr_e1rm)
 
-    return pd.DataFrame(rows)
+    if not rows:
+        return pd.DataFrame()
+
+    out_df = pd.DataFrame(rows).sort_values("dt").reset_index(drop=True)
+    return out_df.drop(columns=["dt"])
 
 
 @dataclass
