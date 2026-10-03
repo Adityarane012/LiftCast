@@ -38,3 +38,11 @@ jobs:
         PYTHONPATH: src
       run: |
         pytest -v --durations=10
+
+    - name: Run 40-Point Rolling Origin Backtest Benchmark
+      if: matrix.python-version == '3.12'
+      env:
+        PYTHONPATH: src
+      run: |
+        python scripts/run_eval.py >> $GITHUB_STEP_SUMMARY
+

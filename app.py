@@ -400,15 +400,32 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
 
-    col_seed, col_clear = st.columns(2)
+    col_seed, col_real, col_clear = st.columns(3)
     with col_seed:
-        if st.button("⚡ Seed Demo", use_container_width=True, help="Seed 6-month rich workout history across 7 lifts"):
+        if st.button("⚡ Demo", use_container_width=True, help="Seed 6-month synthetic workout history across 7 lifts"):
             with st.spinner("Seeding demo database..."):
                 from liftcast.demo_seed import seed_demo_database
                 res = seed_demo_database(conn, total_weeks=26, clear_existing=True, bodyweight_kg=float(bodyweight_kg))
                 st.success(f"Seeded {res['sessions_created']} sessions ({res['sets_created']} sets)!")
+                play_audio_chime("success")
                 time.sleep(0.5)
                 st.rerun()
+
+    with col_real:
+        if st.button("🏋️ Real", use_container_width=True, help="Load Armaan's real Liftoff dataset (228 sessions)"):
+            real_csv = Path("data/raw/liftoff_workout_data.csv")
+            if not real_csv.exists():
+                real_csv = Path("liftoff_workout_data.csv")
+            if real_csv.exists():
+                with st.spinner("Importing Armaan's real dataset..."):
+                    from liftcast.importer import import_liftoff_csv
+                    res = import_liftoff_csv(real_csv, conn)
+                    st.success(f"Imported {res['sessions_imported']} sessions ({res['sets_imported']} sets)!")
+                    play_audio_chime("success")
+                    time.sleep(0.5)
+                    st.rerun()
+            else:
+                st.error("liftoff_workout_data.csv not found!")
 
     with col_clear:
         if st.button("🗑️ Clear", use_container_width=True, help="Reset workout database"):
@@ -418,6 +435,58 @@ with st.sidebar:
             st.warning("Database cleared!")
             time.sleep(0.5)
             st.rerun()
+
+    with st.expander("📦 Data Sovereignty & Export", expanded=False):
+        st.markdown(
+            """
+            <div style="font-size:0.75rem; color:#94A3B8; margin-bottom:0.5rem;">
+                Armaan owns 100% of his data. Download your local SQLite database or export clean CSV files anytime with zero cloud egress.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        db_file = Path("data/liftcast.db")
+        if db_file.exists():
+            try:
+                with open(db_file, "rb") as f:
+                    st.download_button(
+                        label="💾 Download SQLite DB (.db)",
+                        data=f.read(),
+                        file_name="liftcast.db",
+                        mime="application/x-sqlite3",
+                        use_container_width=True,
+                        help="Complete raw SQLite database containing all sessions, sets, and alias mappings.",
+                    )
+            except Exception:
+                pass
+
+        if not history_df_all.empty:
+            csv_data = history_df_all.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                label="📥 Export History (CSV)",
+                data=csv_data,
+                file_name=f"liftcast_history_{date.today().isoformat()}.csv",
+                mime="text/csv",
+                use_container_width=True,
+                help="Clean comma-separated values of all logged sets and calculated e1RM.",
+            )
+
+        uploaded_csv = st.file_uploader(
+            "📂 Import Custom CSV",
+            type=["csv"],
+            help="Import additional historical workouts (Liftoff or Hevy format) idempotently.",
+        )
+        if uploaded_csv is not None:
+            if st.button("🚀 Process & Import Uploaded CSV", use_container_width=True):
+                with st.spinner("Processing CSV import..."):
+                    from liftcast.importer import import_liftoff_csv
+                    import_res = import_liftoff_csv(uploaded_csv, conn)
+                    st.success(
+                        f"Imported {import_res['sessions_imported']} sessions ({import_res['sets_imported']} sets, {import_res['sessions_skipped']} skipped duplicates)!"
+                    )
+                    play_audio_chime("success")
+                    time.sleep(0.8)
+                    st.rerun()
 
     st.markdown("---")
     page = st.radio(

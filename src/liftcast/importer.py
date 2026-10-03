@@ -72,20 +72,23 @@ def clean_liftoff_dataframe(
 
 
 def import_liftoff_csv(
-    csv_path: str | Path,
+    csv_source: str | Path | Any,
     conn: sqlite3.Connection,
     conversion_factor: float = 2.2,
 ) -> dict[str, int]:
     """Import Liftoff workout history into SQLite database idempotently.
     
+    Accepts a filepath (str or Path) or a file-like buffer (e.g. UploadedFile).
     Returns a dictionary of import statistics.
     """
-    path = Path(csv_path)
-    if not path.exists():
-        raise FileNotFoundError(f"Liftoff CSV not found at: {path}")
+    if isinstance(csv_source, (str, Path)):
+        path = Path(csv_source)
+        if not path.exists():
+            raise FileNotFoundError(f"Liftoff CSV not found at: {path}")
+        raw_df = pd.read_csv(path)
+    else:
+        raw_df = pd.read_csv(csv_source)
 
-    # Read raw CSV
-    raw_df = pd.read_csv(path)
     total_raw_rows = len(raw_df)
 
     # Clean and filter dataframe

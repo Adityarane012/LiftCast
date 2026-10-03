@@ -89,3 +89,19 @@ def test_import_liftoff_csv_idempotency_and_grouping(mem_db, sample_csv):
     # Verification: set count remains 4
     history_after = get_history_df(mem_db)
     assert len(history_after) == 4
+
+
+def test_import_liftoff_csv_from_string_buffer(mem_db):
+    import io
+    csv_content = """Date,Workout Name,Duration,Exercise Name,Set Order,Weight,Reps,RPE,Distance,Seconds,Notes
+2025-04-01,Chest Day,45m,Bench Press,1,220,5,,0,0,test note
+2025-04-01,Chest Day,45m,Bench Press,2,220,5,,0,0,
+"""
+    buffer = io.StringIO(csv_content)
+    res = import_liftoff_csv(buffer, mem_db, conversion_factor=2.2)
+    assert res["sessions_imported"] == 1
+    assert res["sets_imported"] == 2
+    history = get_history_df(mem_db)
+    assert len(history) == 2
+    assert history.iloc[0]["weight_kg"] == 100.0
+
