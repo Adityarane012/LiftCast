@@ -131,138 +131,23 @@ code, pre, .mono {
     margin-top: 0.25rem;
 }
 
-/* High contrast badges */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.28rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-}
-
-.badge-emerald {
-    background: rgba(16, 185, 129, 0.2);
-    color: #34D399;
-    border: 1px solid rgba(52, 211, 153, 0.4);
-}
-
-.badge-cyan {
-    background: rgba(6, 182, 212, 0.2);
-    color: #38BDF8;
-    border: 1px solid rgba(56, 189, 248, 0.4);
-}
-
-.badge-rose {
-    background: rgba(244, 63, 94, 0.2);
-    color: #FB7185;
-    border: 1px solid rgba(251, 113, 133, 0.4);
-}
-
-.badge-amber {
-    background: rgba(245, 158, 11, 0.2);
-    color: #FBBF24;
-    border: 1px solid rgba(251, 191, 36, 0.4);
-}
-
-.badge-violet {
-    background: rgba(139, 92, 246, 0.2);
-    color: #C084FC;
-    border: 1px solid rgba(192, 132, 252, 0.4);
-}
-
-/* Hero text styling */
-.hero-title {
-    font-size: 2.15rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    color: #FFFFFF !important;
-    margin-bottom: 0.25rem;
-}
-
-.hero-subtitle {
-    color: #94A3B8 !important;
-    font-size: 0.98rem;
-    line-height: 1.5;
-    margin-bottom: 1.25rem;
-}
-
-/* Keyboard hint badge */
-.kbd-hint {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+/* Status tags */
+.tag {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
     border-radius: 4px;
-    padding: 2px 7px;
     font-size: 0.72rem;
-    font-family: monospace;
-    color: #CBD5E1;
-    margin-left: 6px;
+    font-weight: 600;
 }
-
-/* Audio equalizer wave animation */
-.audio-equalizer {
-    display: inline-flex;
-    align-items: flex-end;
-    gap: 3px;
-    height: 18px;
-    margin-left: 8px;
-}
-.eq-bar {
-    width: 3px;
-    background: #38BDF8;
-    border-radius: 2px;
-    animation: eq-bounce 1.2s infinite ease-in-out alternate;
-}
-.eq-bar:nth-child(1) { height: 6px; animation-delay: 0.1s; }
-.eq-bar:nth-child(2) { height: 16px; animation-delay: 0.3s; }
-.eq-bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
-.eq-bar:nth-child(4) { height: 14px; animation-delay: 0.4s; }
-.eq-bar:nth-child(5) { height: 8px; animation-delay: 0.15s; }
-@keyframes eq-bounce {
-    0% { height: 4px; }
-    100% { height: 18px; }
-}
+.tag-emerald { background: rgba(16, 185, 129, 0.15); color: #34D399; }
+.tag-rose { background: rgba(244, 63, 94, 0.15); color: #FB7185; }
+.tag-amber { background: rgba(245, 158, 11, 0.15); color: #FBBF24; }
+.tag-cyan { background: rgba(56, 189, 248, 0.15); color: #38BDF8; }
 </style>
 """
 
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
-
-def play_audio_chime(sound_type: str = "success") -> None:
-    """Synthesize immediate browser Web Audio API tone without external media files."""
-    if not st.session_state.get("audio_chime_enabled", True):
-        return
-    freqs = "523.25, 659.25, 783.99" if sound_type == "success" else "440.0, 554.37"
-    components.html(
-        f"""
-        <script>
-        (function() {{
-            try {{
-                var AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                var ctx = new AudioContext();
-                var freqs = [{freqs}];
-                freqs.forEach(function(f, idx) {{
-                    var osc = ctx.createOscillator();
-                    var gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.value = f;
-                    gain.gain.setValueAtTime(0.06, ctx.currentTime + idx * 0.08);
-                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.16);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(ctx.currentTime + idx * 0.08);
-                    osc.stop(ctx.currentTime + idx * 0.08 + 0.18);
-                }});
-            }} catch (_) {{}}
-        }})();
-        </script>
-        """,
-        height=0,
-        width=0,
-    )
 
 
 # -----------------------------------------------------------------------------
@@ -280,71 +165,46 @@ conn = get_db()
 # Sidebar
 # -----------------------------------------------------------------------------
 with st.sidebar:
-    st.markdown(
-        """
-        <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.25rem;">
-            <div style="background: linear-gradient(135deg, #38bdf8, #818cf8); border-radius:10px; padding:6px 10px; font-weight:900; color:#0f172a; font-size:1.1rem;">⚡</div>
-            <div>
-                <div style="font-size:1.3rem; font-weight:800; color:#f8fafc; letter-spacing:-0.02em;">LiftCast</div>
-                <div style="font-size:0.75rem; color:#64748b; font-weight:600;">BUILT FOR ARMAAN</div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.title("LiftCast")
+    st.caption("Local workout logger & strength forecaster")
 
-    st.markdown(
-        """
-        <div style="margin: 0.75rem 0 1.25rem 0;">
-            <span class="badge badge-emerald">🔒 100% Offline / Local</span>
-            <span class="badge badge-cyan" style="margin-left:4px;">Hacktoberfest '26</span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown("### 🏋️ Athlete Profile")
+    st.subheader("Athlete")
     bodyweight_kg = st.number_input(
-        "Armaan's Bodyweight (kg)",
+        "Bodyweight (kg)",
         min_value=40.0,
         max_value=160.0,
         value=75.0,
         step=0.5,
-        help="Used to compute strength-to-bodyweight ratios and tier projections.",
+        help="Used for strength-to-bodyweight ratios and tier projections.",
     )
 
-    st.markdown("### 🤖 Local AI Runtime")
+    st.subheader("Model")
     model_choice = st.selectbox(
         "Gemma Model (Ollama)",
         options=["gemma4:e2b", "gemma4:e4b", "gemma3:1b"],
         index=0,
-        help="Local Gemma model running via Ollama. Options: num_ctx=8192, temp=0.",
+        help="Local Gemma model running via Ollama.",
     )
 
-    st.markdown(
-        """
-        <div style="background:rgba(15, 23, 42, 0.6); padding:0.75rem; border-radius:8px; border:1px solid rgba(255,255,255,0.05); font-size:0.78rem; color:#94a3b8; margin-top:0.5rem;">
-            <div><b>GPU:</b> RTX 3050 (4 GB VRAM) — Gemma</div>
-            <div><b>CPU:</b> TabPFN In-Context Forecaster</div>
-            <div><b>Voice:</b> ElevenLabs TTS & Browser Speech</div>
-            <div><b>Zero Cloud:</b> No telemetry, no egress</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    with st.expander("👓 Gym Ergonomics & Accessibility", expanded=False):
+    with st.expander("Settings", expanded=False):
         chalk_mode = st.toggle(
-            "🧤 Chalky Hands / Big Touch",
+            "Large touch targets",
             value=st.session_state.get("chalk_mode", False),
-            help="Enlarges buttons, inputs, and touch targets to 54px+ for gym floor usability with sweaty or chalky hands.",
+            help="Enlarges buttons and inputs for easier tapping on mobile or gym floor.",
             key="chalk_mode",
         )
-        audio_chime_toggle = st.toggle(
-            "🔔 Gym Audio Chimes",
-            value=st.session_state.get("audio_chime_enabled", True),
-            help="Synthesizes instant Web Audio confirmation tones on workout parse and save.",
-            key="audio_chime_enabled",
+        st.text_input(
+            "ElevenLabs API Key (optional)",
+            value=os.environ.get("ELEVENLABS_API_KEY", ""),
+            type="password",
+            help="Optional. Uses browser speech synthesis when blank.",
+            key="elevenlabs_api_key_input",
+        )
+        st.selectbox(
+            "Voice",
+            options=["pNInz6obpgDQGcFmaJgB", "21m00Tcm4TlvDq8ikWAM"],
+            format_func=lambda x: "Adam" if "pNIn" in x else "Rachel",
+            key="elevenlabs_voice_choice",
         )
 
     if st.session_state.get("chalk_mode", False):
@@ -352,110 +212,71 @@ with st.sidebar:
             """
             <style>
             .stButton > button {
-                min-height: 56px !important;
-                font-size: 1.15rem !important;
-                font-weight: 800 !important;
-                border-radius: 12px !important;
-                border: 2px solid rgba(56, 189, 248, 0.4) !important;
+                min-height: 54px !important;
+                font-size: 1.1rem !important;
+                font-weight: 700 !important;
+                border-radius: 8px !important;
             }
             input, textarea, select {
-                min-height: 50px !important;
-                font-size: 1.1rem !important;
-            }
-            .metric-val {
-                font-size: 2.1rem !important;
+                min-height: 48px !important;
+                font-size: 1.05rem !important;
             }
             </style>
             """,
             unsafe_allow_html=True,
         )
 
-    with st.expander("🎙️ ElevenLabs Voice (Optional)", expanded=False):
-        st.text_input(
-            "API Key",
-            value=os.environ.get("ELEVENLABS_API_KEY", ""),
-            type="password",
-            help="Optional: Enables ultra-realistic neural TTS voice for gym earbuds. Leave empty to use 100% offline browser speech.",
-            key="elevenlabs_api_key_input",
-        )
-        st.selectbox(
-            "Coach Voice",
-            options=["pNInz6obpgDQGcFmaJgB", "21m00Tcm4TlvDq8ikWAM"],
-            format_func=lambda x: "Adam (Athletic Coach)" if "pNIn" in x else "Rachel (Calm Technical)",
-            key="elevenlabs_voice_choice",
-        )
-
     # Database quick stats
     sessions_all = get_all_sessions(conn)
     history_df_all = get_history_df(conn)
     st.markdown("---")
-    st.markdown(
-        f"""
-        <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.5rem;">
-            <b>Database History:</b><br/>
-            • <b>{len(sessions_all)}</b> calendar sessions<br/>
-            • <b>{len(history_df_all):,}</b> structured sets stored
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.caption(f"{len(sessions_all)} sessions • {len(history_df_all):,} sets stored")
 
     col_seed, col_real, col_clear = st.columns(3)
     with col_seed:
-        if st.button("⚡ Demo", use_container_width=True, help="Seed 6-month synthetic workout history across 7 lifts"):
-            with st.spinner("Seeding demo database..."):
+        if st.button("Demo", use_container_width=True, help="Load 6-month synthetic workout history"):
+            with st.spinner("Loading demo data..."):
                 from liftcast.demo_seed import seed_demo_database
                 res = seed_demo_database(conn, total_weeks=26, clear_existing=True, bodyweight_kg=float(bodyweight_kg))
-                st.success(f"Seeded {res['sessions_created']} sessions ({res['sets_created']} sets)!")
-                play_audio_chime("success")
+                st.success(f"Loaded {res['sessions_created']} sessions")
                 time.sleep(0.5)
                 st.rerun()
 
     with col_real:
-        if st.button("🏋️ Real", use_container_width=True, help="Load Armaan's real Liftoff dataset (228 sessions)"):
+        if st.button("Real", use_container_width=True, help="Load Liftoff workout dataset"):
             real_csv = Path("data/raw/liftoff_workout_data.csv")
             if not real_csv.exists():
                 real_csv = Path("liftoff_workout_data.csv")
             if real_csv.exists():
-                with st.spinner("Importing Armaan's real dataset..."):
+                with st.spinner("Importing dataset..."):
                     from liftcast.importer import import_liftoff_csv
                     res = import_liftoff_csv(real_csv, conn)
-                    st.success(f"Imported {res['sessions_imported']} sessions ({res['sets_imported']} sets)!")
-                    play_audio_chime("success")
+                    st.success(f"Imported {res['sessions_imported']} sessions")
                     time.sleep(0.5)
                     st.rerun()
             else:
-                st.error("liftoff_workout_data.csv not found!")
+                st.error("liftoff_workout_data.csv not found")
 
     with col_clear:
-        if st.button("🗑️ Clear", use_container_width=True, help="Reset workout database"):
+        if st.button("Clear", use_container_width=True, help="Reset database"):
             with conn:
                 conn.execute("DELETE FROM sets")
                 conn.execute("DELETE FROM sessions")
-            st.warning("Database cleared!")
+            st.warning("Database cleared")
             time.sleep(0.5)
             st.rerun()
 
-    with st.expander("📦 Data Sovereignty & Export", expanded=False):
-        st.markdown(
-            """
-            <div style="font-size:0.75rem; color:#94A3B8; margin-bottom:0.5rem;">
-                Armaan owns 100% of his data. Download your local SQLite database or export clean CSV files anytime with zero cloud egress.
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    with st.expander("Import / Export", expanded=False):
         db_file = Path("data/liftcast.db")
         if db_file.exists():
             try:
                 with open(db_file, "rb") as f:
                     st.download_button(
-                        label="💾 Download SQLite DB (.db)",
+                        label="Download SQLite DB",
                         data=f.read(),
                         file_name="liftcast.db",
                         mime="application/x-sqlite3",
                         use_container_width=True,
-                        help="Complete raw SQLite database containing all sessions, sets, and alias mappings.",
                     )
             except Exception:
                 pass
@@ -463,70 +284,61 @@ with st.sidebar:
         if not history_df_all.empty:
             csv_data = history_df_all.to_csv(index=False).encode("utf-8")
             st.download_button(
-                label="📥 Export History (CSV)",
+                label="Export CSV",
                 data=csv_data,
                 file_name=f"liftcast_history_{date.today().isoformat()}.csv",
                 mime="text/csv",
                 use_container_width=True,
-                help="Clean comma-separated values of all logged sets and calculated e1RM.",
             )
 
         uploaded_csv = st.file_uploader(
-            "📂 Import Custom CSV",
+            "Import CSV (Liftoff or Hevy format)",
             type=["csv"],
-            help="Import additional historical workouts (Liftoff or Hevy format) idempotently.",
         )
         if uploaded_csv is not None:
-            if st.button("🚀 Process & Import Uploaded CSV", use_container_width=True):
-                with st.spinner("Processing CSV import..."):
+            if st.button("Process CSV", use_container_width=True):
+                with st.spinner("Importing CSV..."):
                     from liftcast.importer import import_liftoff_csv
                     import_res = import_liftoff_csv(uploaded_csv, conn)
                     st.success(
-                        f"Imported {import_res['sessions_imported']} sessions ({import_res['sets_imported']} sets, {import_res['sessions_skipped']} skipped duplicates)!"
+                        f"Imported {import_res['sessions_imported']} sessions ({import_res['sets_imported']} sets, {import_res['sessions_skipped']} skipped duplicates)"
                     )
-                    play_audio_chime("success")
                     time.sleep(0.8)
                     st.rerun()
 
     st.markdown("---")
     page = st.radio(
-        "Navigation",
+        "View",
         options=[
-            "📝 10-Second Text Logger",
-            "📈 Lift Progress & Forecast",
-            "🧠 Weekly Coach Recap",
-            "🔬 Benchmark & Architecture",
+            "Logger",
+            "Progress & Forecast",
+            "Coach Recap",
+            "Benchmark & Architecture",
         ],
         index=0,
     )
 
 
 # -----------------------------------------------------------------------------
-# PAGE 1: 10-Second Text Logger
+# PAGE 1: Workout Logger
 # -----------------------------------------------------------------------------
-if page == "📝 10-Second Text Logger":
-    st.markdown('<div class="hero-title">10-Second Text Logger</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="hero-subtitle">Armaan types the way he texts: shorthand, typos, Hinglish. Local Gemma structures it into SQLite with zero friction.</div>',
-        unsafe_allow_html=True,
-    )
+if page == "Logger":
+    st.title("Workout Logger")
+    st.caption("Paste workout notes or shorthand. Local Gemma extracts structured sets.")
 
     col_presets, col_date = st.columns([3, 1])
     with col_date:
-        log_date = st.date_input("Session Date", value=date.today())
-        log_bw = st.number_input("Session BW (kg)", value=float(bodyweight_kg), step=0.5)
+        log_date = st.date_input("Date", value=date.today())
+        log_bw = st.number_input("Bodyweight (kg)", value=float(bodyweight_kg), step=0.5)
 
     with col_presets:
-        st.markdown(
-            "<span style='font-size:0.8rem; font-weight:600; color:#94a3b8;'>Quick Fill Presets:</span>",
-            unsafe_allow_html=True,
-        )
+        st.caption("Examples:")
         p_cols = st.columns(5)
         presets = [
-            ("Bench Press", "bench 60 8 8 7, last set died"),
-            ("Bent Over Row", "bor 50kg 8 8 8"),
-            ("Hinglish Lat Pull", "aaj lat pulldown 55 pe 10 10 9"),
-            ("Deadlift", "deadlift 120 5 5, felt easy"),
+            ("Bench", "bench 60 8 8 7"),
+            ("Row", "bor 50kg 8 8 8"),
+            ("Pulldown", "lat pulldown 55 10 10 9"),
+            ("Deadlift", "deadlift 120 5 5"),
             ("RDL", "rdl 70 8 8 8"),
         ]
         for idx, (label, text_val) in enumerate(presets):
@@ -534,49 +346,31 @@ if page == "📝 10-Second Text Logger":
                 st.session_state["raw_log_input"] = text_val
 
     raw_text = st.text_area(
-        "Type workout note:",
-        value=st.session_state.get("raw_log_input", "bench 60 8 8 7, last set died"),
+        "Workout note:",
+        value=st.session_state.get("raw_log_input", "bench 60 8 8 7"),
         height=100,
-        placeholder="e.g. bench 60 8 8 7, last set died\nbor 50kg 8 8 8",
+        placeholder="e.g. bench 60 8 8 7\nbor 50kg 8 8 8",
         key="raw_text_area",
     )
 
-    col_btn, col_info = st.columns([1, 2])
-    with col_btn:
-        parse_clicked = st.button("⚡ Parse with Gemma", type="primary", use_container_width=True)
-    with col_info:
-        st.markdown(
-            "<div style='display:flex; align-items:center; height:100%; padding-top:6px;'>"
-            "<span class='kbd-hint'>⚡ 10s Natural Language Parse</span>"
-            "<span class='badge badge-cyan' style='margin-left:6px;'>Zero Cloud Egress</span>"
-            "</div>",
-            unsafe_allow_html=True,
-        )
+    parse_clicked = st.button("Parse Note", type="primary")
 
     if parse_clicked or "last_parse_result" in st.session_state:
         if parse_clicked:
-            with st.spinner(f"Running local {model_choice} via Ollama..."):
+            with st.spinner(f"Parsing with {model_choice}..."):
                 t_start = time.perf_counter()
                 res = parse_log(raw_text, conn=conn, model=model_choice)
                 t_elapsed = round((time.perf_counter() - t_start) * 1000, 1)
                 st.session_state["last_parse_result"] = res
                 st.session_state["last_parse_time_ms"] = t_elapsed
                 st.session_state["last_raw_text"] = raw_text
-                play_audio_chime("success")
 
         parse_res = st.session_state["last_parse_result"]
         t_ms = st.session_state.get("last_parse_time_ms", 0.0)
 
-        st.markdown(
-            f"""
-            <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem; margin-bottom:1rem;">
-                <span class="badge badge-cyan">⚡ Gemma Parsed in {t_ms} ms</span>
-                <span class="badge badge-emerald">Enforced JSON Schema</span>
-                {"<span class='badge badge-amber'>⚠️ Needs Confirmation</span>" if parse_res.needs_confirmation else "<span class='badge badge-emerald'>✓ Confident Match</span>"}
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        st.caption(f"Parsed in {t_ms} ms")
+        if parse_res.needs_confirmation:
+            st.warning("Low confidence on some exercises — please verify before saving.")
 
         if parse_res.issues:
             for issue in parse_res.issues:
@@ -585,7 +379,6 @@ if page == "📝 10-Second Text Logger":
         if not parse_res.entries:
             st.error("No valid exercise sets were parsed. Please check the text format.")
         else:
-            # Prepare editable preview table
             table_rows = []
             for entry in parse_res.entries:
                 for r in entry.reps:
@@ -601,7 +394,7 @@ if page == "📝 10-Second Text Logger":
                     )
 
             preview_df = pd.DataFrame(table_rows)
-            st.markdown("#### Structured Sets Preview")
+            st.markdown("#### Structured Sets")
             edited_df = st.data_editor(
                 preview_df,
                 num_rows="dynamic",
@@ -611,7 +404,7 @@ if page == "📝 10-Second Text Logger":
 
             col_save, _ = st.columns([1, 3])
             with col_save:
-                if st.button("💾 Confirm & Save Session", type="secondary", use_container_width=True):
+                if st.button("Save Session", type="secondary", use_container_width=True):
                     try:
                         date_str = log_date.strftime("%Y-%m-%d")
                         sess_id = get_or_create_session(
@@ -640,12 +433,7 @@ if page == "📝 10-Second Text Logger":
                                 )
                                 saved_count += 1
 
-                        st.success(
-                            f"✅ Successfully recorded {saved_count} sets for session {date_str}! Top sets updated."
-                        )
-                        st.balloons()
-                        play_audio_chime("success")
-                        # Reset
+                        st.success(f"Saved {saved_count} sets for {date_str}.")
                         if "last_parse_result" in st.session_state:
                             del st.session_state["last_parse_result"]
                     except Exception as err:
@@ -655,12 +443,9 @@ if page == "📝 10-Second Text Logger":
 # -----------------------------------------------------------------------------
 # PAGE 2: Lift Progress & Forecast
 # -----------------------------------------------------------------------------
-elif page == "📈 Lift Progress & Forecast":
-    st.markdown('<div class="hero-title">Lift Progress & Forecast</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="hero-subtitle">Deterministic session top-set e1RM history paired with local TabPFN next-session forecasts and rolling-slope stall detection.</div>',
-        unsafe_allow_html=True,
-    )
+elif page == "Progress & Forecast":
+    st.title("Lift Progress & Forecast")
+    st.caption("Session top-set estimated 1RM history, stall detection, and next-session forecast.")
 
     all_sets_df = get_history_df(conn)
     if all_sets_df.empty:
@@ -675,7 +460,7 @@ elif page == "📈 Lift Progress & Forecast":
     if "Bench Press" in unique_lifts:
         default_index = unique_lifts.index("Bench Press")
 
-    selected_lift = st.selectbox("Select Exercise / Lift", options=unique_lifts, index=default_index)
+    selected_lift = st.selectbox("Exercise", options=unique_lifts, index=default_index)
 
     lift_history = top_sets_df[top_sets_df["exercise"].str.lower() == selected_lift.lower()].sort_values("date")
 
@@ -741,16 +526,16 @@ elif page == "📈 Lift Progress & Forecast":
 
     with col4:
         if is_currently_stalled:
-            badge_html = f'<span class="badge badge-rose">⚠️ STALL DETECTED</span>'
-            status_desc = f"Slope {latest_slope:+.2f}%/wk (< 0.0%/wk over 56d)"
+            badge_html = '<span class="tag tag-rose">Plateau</span>'
+            status_desc = f"Slope {latest_slope:+.2f}%/wk (56d window)"
         else:
-            badge_html = f'<span class="badge badge-emerald">✅ PROGRESSING</span>'
-            status_desc = f"Slope {latest_slope:+.2f}%/wk (56-day trend)"
+            badge_html = '<span class="tag tag-emerald">Progressing</span>'
+            status_desc = f"Slope {latest_slope:+.2f}%/wk (56d window)"
 
         st.markdown(
             f"""
             <div class="glass-metric">
-                <div class="metric-label">Stall Rule State</div>
+                <div class="metric-label">Stall Status</div>
                 <div style="margin-top:0.4rem; margin-bottom:0.4rem;">{badge_html}</div>
                 <div class="metric-sub">{status_desc}</div>
             </div>
@@ -881,11 +666,8 @@ elif page == "📈 Lift Progress & Forecast":
         snap_to_plate_increment,
     )
 
-    st.markdown("### 🏋️ Barbell Plate Loader & Gym Target Recommender")
-    st.markdown(
-        "<div style='font-size:0.85rem; color:#94a3b8; margin-bottom:1rem;'>Inverts TabPFN's e1RM forecast into an actionable gym working weight (snapped to standard 2.5 kg plates) with exact plate counts per barbell sleeve.</div>",
-        unsafe_allow_html=True,
-    )
+    st.subheader("Barbell Plate Calculator")
+    st.caption("Plate breakdown per sleeve (snapped to standard 2.5 kg plate increments).")
 
     # Invert TabPFN e1RM to an 8-rep working target
     default_working_weight = (
@@ -896,43 +678,43 @@ elif page == "📈 Lift Progress & Forecast":
     if is_currently_stalled:
         deload_target = snap_to_plate_increment(default_working_weight * 0.90, increment=2.5)
         st.info(
-            f"💡 **Stall-Aware Deload Target:** Since {selected_lift} has plateaued, consider a technical deload at **{deload_target:.1f} kg** (90% of working weight) or hold **{default_working_weight:.1f} kg** focusing on bar speed and technique."
+            f"Plateau detected on {selected_lift}. Suggested deload target: **{deload_target:.1f} kg** (90%) or hold **{default_working_weight:.1f} kg**."
         )
 
     suggested_val = float(default_working_weight) if default_working_weight >= 20.0 else 60.0
     if "plate_target_wt" not in st.session_state:
         st.session_state["plate_target_wt"] = suggested_val
 
-    st.markdown("<span style='font-size:0.8rem; font-weight:700; color:#94a3b8;'>⚡ Quick Barbell Stepper (Chalk-Friendly):</span>", unsafe_allow_html=True)
+    st.caption("Adjust weight:")
     st_c1, st_c2, st_c3, st_c4 = st.columns(4)
-    if st_c1.button("➖ 10 kg", key="step_sub_10", use_container_width=True):
+    if st_c1.button("-10 kg", key="step_sub_10", use_container_width=True):
         st.session_state["plate_target_wt"] = max(20.0, round(st.session_state["plate_target_wt"] - 10.0, 1))
         st.rerun()
-    if st_c2.button("➖ 2.5 kg", key="step_sub_2_5", use_container_width=True):
+    if st_c2.button("-2.5 kg", key="step_sub_2_5", use_container_width=True):
         st.session_state["plate_target_wt"] = max(20.0, round(st.session_state["plate_target_wt"] - 2.5, 1))
         st.rerun()
-    if st_c3.button("➕ 2.5 kg", key="step_add_2_5", use_container_width=True):
+    if st_c3.button("+2.5 kg", key="step_add_2_5", use_container_width=True):
         st.session_state["plate_target_wt"] = min(350.0, round(st.session_state["plate_target_wt"] + 2.5, 1))
         st.rerun()
-    if st_c4.button("➕ 10 kg", key="step_add_10", use_container_width=True):
+    if st_c4.button("+10 kg", key="step_add_10", use_container_width=True):
         st.session_state["plate_target_wt"] = min(350.0, round(st.session_state["plate_target_wt"] + 10.0, 1))
         st.rerun()
 
     col_target, col_bar, col_reps = st.columns([2, 1, 1])
     with col_target:
         target_wt = st.number_input(
-            "Target Barbell Weight (kg)",
+            "Target Weight (kg)",
             min_value=15.0,
             max_value=350.0,
             value=float(st.session_state["plate_target_wt"]),
             step=2.5,
             key="input_target_wt_val",
-            help="Total barbell weight (bar + plates on both sides).",
+            help="Total weight including bar.",
         )
         st.session_state["plate_target_wt"] = target_wt
     with col_bar:
         bar_wt = st.selectbox(
-            "Barbell Type",
+            "Barbell",
             options=[20.0, 15.0],
             format_func=lambda x: f"{int(x)} kg (Olympic)" if x == 20 else f"{int(x)} kg (Technique)",
             index=0,
@@ -966,11 +748,11 @@ elif page == "📈 Lift Progress & Forecast":
         <div class="glass-panel" style="margin-top:0.75rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
                 <div>
-                    <span style="font-size:1.1rem; font-weight:800; color:#f8fafc;">Barbell Sleeve Breakdown</span>
-                    <span style="font-size:0.85rem; color:#94a3b8; margin-left:0.5rem;">(Per Side: {loading.weight_per_side_loaded:.2f} kg)</span>
+                    <span style="font-size:1rem; font-weight:700; color:#f8fafc;">Sleeve Breakdown</span>
+                    <span style="font-size:0.82rem; color:#94a3b8; margin-left:0.5rem;">({loading.weight_per_side_loaded:.2f} kg / side)</span>
                 </div>
                 <div>
-                    <span class="badge badge-emerald">Total: {loading.total_loaded_kg:.1f} kg {"✓ Exact Match" if loading.is_exact else f"(Remainder: {loading.remainder_kg} kg)"}</span>
+                    <span class="tag tag-emerald">Total: {loading.total_loaded_kg:.1f} kg</span>
                 </div>
             </div>
 
@@ -1002,18 +784,15 @@ elif page == "📈 Lift Progress & Forecast":
 # -----------------------------------------------------------------------------
 # PAGE 3: Weekly Coach Recap
 # -----------------------------------------------------------------------------
-elif page == "🧠 Weekly Coach Recap":
-    st.markdown('<div class="hero-title">AI Coach Summary & Strength Tiers</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="hero-subtitle">Gemma narrates weekly performance strictly bound by a deterministic numeric guard. Every number is verified; zero hallucinations allowed.</div>',
-        unsafe_allow_html=True,
-    )
+elif page == "Coach Recap":
+    st.title("Weekly Coach Recap")
+    st.caption("Weekly performance summary generated from verified training numbers.")
 
     all_sets_df = get_history_df(conn)
     top_sets_df = get_session_top_sets(all_sets_df)
 
     if top_sets_df.empty:
-        st.info("No workout history found. Log workouts to generate coach recap.")
+        st.info("No workout history found. Log workouts to generate a recap.")
         st.stop()
 
     # Build weekly stats payload from the most recent 14 days of data
@@ -1035,7 +814,6 @@ elif page == "🧠 Weekly Coach Recap":
         stalls = detect_stalls(l_df, window_days=56, theta_pct_week=0.0, min_n=4)
         is_stalled = bool(stalls.iloc[-1]["stalled"]) if not stalls.empty and pd.notna(stalls.iloc[-1]["stalled"]) else False
 
-        # Quick next forecast
         tabpfn = TabPFNForecaster(device="cpu", random_seed=42)
         f_next = tabpfn.predict_next(top_sets_df, lift, (latest_dt + pd.Timedelta(days=7)).strftime("%Y-%m-%d"))
 
@@ -1053,35 +831,29 @@ elif page == "🧠 Weekly Coach Recap":
         "lifts": lifts_payload,
     }
 
-    col_btn, col_badge = st.columns([1, 3])
-    with col_btn:
-        generate_clicked = st.button("🎙️ Generate Coach Recap", type="primary", use_container_width=True)
+    generate_clicked = st.button("Generate Recap", type="primary")
 
     if generate_clicked or "coach_recap_result" in st.session_state:
         if generate_clicked:
-            with st.spinner(f"Gemma ({model_choice}) generating narrative under numeric guard audit..."):
+            with st.spinner(f"Generating summary with {model_choice}..."):
                 recap_res = generate_coach_summary(stats_payload, model=model_choice)
                 st.session_state["coach_recap_result"] = recap_res
 
         result = st.session_state["coach_recap_result"]
-
-        if result.is_fallback:
-            guard_badge = '<span class="badge badge-amber">⚠️ Fallback Activated (Numeric Guard Caught Hallucination)</span>'
-        else:
-            guard_badge = '<span class="badge badge-emerald">🛡️ 100% Numeric Guard Verified (0 Hallucinations)</span>'
+        guard_badge = '<span class="tag tag-amber">Fallback Summary</span>' if result.is_fallback else '<span class="tag tag-emerald">Verified Stats</span>'
 
         st.markdown(
             f"""
             <div class="glass-panel" style="border-left: 4px solid #38bdf8; margin-top: 1rem;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-                    <div style="font-weight:700; color:#f8fafc; font-size:1.05rem;">Weekly Coach Briefing for Armaan</div>
+                    <div style="font-weight:700; color:#f8fafc; font-size:1rem;">Weekly Summary</div>
                     <div>{guard_badge}</div>
                 </div>
                 <div style="font-size:0.95rem; line-height:1.65; color:#cbd5e1; white-space:pre-wrap;">
 {html.escape(result.summary)}
                 </div>
                 <div style="margin-top:0.75rem; font-size:0.75rem; color:#64748b;">
-                    Model: <code>{result.model_used}</code> • Enforced Hard Rule 3: The model explains; it never invents numbers.
+                    Model: <code>{result.model_used}</code>
                 </div>
             </div>
             """,
@@ -1090,7 +862,7 @@ elif page == "🧠 Weekly Coach Recap":
 
         col_copy_btn, _ = st.columns([1, 2])
         with col_copy_btn:
-            if st.button("📋 Copy Recap for Text/WhatsApp", use_container_width=True):
+            if st.button("Copy Summary", use_container_width=True):
                 components.html(
                     f"""
                     <script>
@@ -1102,47 +874,18 @@ elif page == "🧠 Weekly Coach Recap":
                     height=0,
                     width=0,
                 )
-                st.success("Copied to clipboard!")
-                play_audio_chime("success")
+                st.success("Copied to clipboard.")
 
-        # ---------------------------------------------------------------------
-        # ElevenLabs Audio Briefing for Gym Earbuds
-        # ---------------------------------------------------------------------
-        st.markdown(
-            """
-            <div style="display:flex; align-items:center; gap:0.5rem; margin-top:1.5rem; margin-bottom:0.25rem;">
-                <span style="font-size:1.3rem; font-weight:800; color:#f8fafc;">🔊 Coach Voice Briefing (Gym Earbuds)</span>
-                <div class="audio-equalizer">
-                    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            "<div style='font-size:0.85rem; color:#94a3b8; margin-bottom:0.75rem;'>"
-            "Hands chalky? Packing your gym bag? Listen to a punchy 10-second recap generated from verified numbers."
-            "</div>",
-            unsafe_allow_html=True,
-        )
+        # Audio Briefing
+        st.subheader("Audio Briefing")
+        st.caption("Spoken summary of weekly training numbers.")
 
         audio_script = build_audio_briefing_script(stats_payload, user_name="Armaan")
-
-        col_voice_btn, col_voice_info = st.columns([1, 2])
-        with col_voice_btn:
-            generate_voice_clicked = st.button("🎙️ Play Coach Voice Note", use_container_width=True)
-        with col_voice_info:
-            active_key = st.session_state.get(
-                "elevenlabs_api_key_input", os.environ.get("ELEVENLABS_API_KEY", "")
-            ).strip()
-            if active_key:
-                st.markdown('<span class="badge badge-cyan">⚡ ElevenLabs Neural TTS Ready</span>', unsafe_allow_html=True)
-            else:
-                st.markdown('<span class="badge badge-emerald">🔒 100% Offline Browser Speech Ready</span>', unsafe_allow_html=True)
+        generate_voice_clicked = st.button("Generate Audio Briefing")
 
         if generate_voice_clicked or "voice_briefing_result" in st.session_state:
             if generate_voice_clicked:
-                with st.spinner("Synthesizing audio briefing..."):
+                with st.spinner("Synthesizing audio..."):
                     active_key = st.session_state.get(
                         "elevenlabs_api_key_input", os.environ.get("ELEVENLABS_API_KEY", "")
                     ).strip()
@@ -1158,11 +901,9 @@ elif page == "🧠 Weekly Coach Recap":
 
             st.markdown(
                 f"""
-                <div class="glass-panel" style="margin-top:0.5rem; border-left:4px solid #10b981;">
-                    <div style="font-weight:700; color:#f8fafc; font-size:0.95rem; margin-bottom:0.4rem;">
-                        🎧 Earbud Briefing Transcript:
-                    </div>
-                    <div style="font-size:0.95rem; line-height:1.5; color:#cbd5e1; font-style:italic; margin-bottom:0.75rem;">
+                <div class="glass-panel" style="margin-top:0.5rem;">
+                    <div style="font-size:0.85rem; color:#94a3b8; margin-bottom:0.35rem;">Transcript:</div>
+                    <div style="font-size:0.92rem; line-height:1.5; color:#cbd5e1; font-style:italic;">
                         "{html.escape(v_result.script)}"
                     </div>
                 </div>
@@ -1173,13 +914,12 @@ elif page == "🧠 Weekly Coach Recap":
             if v_result.audio_bytes:
                 st.audio(v_result.audio_bytes, format="audio/mp3", autoplay=True)
                 st.download_button(
-                    "⬇️ Download Coach Audio Note (.mp3)",
+                    "Download Audio (.mp3)",
                     data=v_result.audio_bytes,
                     file_name=f"liftcast_coach_{latest_dt.strftime('%Y%m%d')}.mp3",
                     mime="audio/mp3",
                 )
             else:
-                # Browser SpeechSynthesis fallback button using safe HTML/JS
                 safe_script_js = v_result.script.replace("'", "\\'").replace('"', '\\"').replace("\n", " ")
                 components.html(
                     f"""
@@ -1189,28 +929,19 @@ elif page == "🧠 Weekly Coach Recap":
                                 window.speechSynthesis.cancel();
                                 var msg = new SpeechSynthesisUtterance('{safe_script_js}');
                                 msg.rate = 1.05;
-                                msg.pitch = 1.0;
                                 window.speechSynthesis.speak(msg);
-                            }} else {{
-                                alert('Browser does not support speech synthesis.');
                             }}
-                        " style="background:#0284c7; color:#ffffff; font-weight:700; padding:10px 18px; border-radius:8px; border:none; cursor:pointer; font-size:14px; box-shadow:0 4px 6px rgba(0,0,0,0.3);">
-                            🔊 Speak Aloud (Offline Browser Earbuds)
+                        " style="background:#0284c7; color:#ffffff; font-weight:600; padding:8px 14px; border-radius:6px; border:none; cursor:pointer; font-size:13px;">
+                            Speak Aloud (Browser Voice)
                         </button>
-                        <span style="color:#94a3b8; font-size:13px;">Using zero-network offline browser voice</span>
                     </div>
                     """,
-                    height=55,
+                    height=45,
                 )
 
-    # -------------------------------------------------------------------------
-    # Strength Tiers & Projections Section
-    # -------------------------------------------------------------------------
-    st.markdown("### 🏆 Strength Tiers & Next Tier Projections")
-    st.markdown(
-        "<div style='font-size:0.85rem; color:#94a3b8; margin-bottom:1rem;'>Calculated via Epley e1RM ÷ Bodyweight ratio with linear trend slope ± SE projections.</div>",
-        unsafe_allow_html=True,
-    )
+    # Strength Tiers
+    st.subheader("Strength Tiers & Projections")
+    st.caption("Epley e1RM to bodyweight ratios with linear slope projections.")
 
     t_cols = st.columns(len(KEY_LIFTS))
     for idx, lift in enumerate(KEY_LIFTS):
@@ -1219,7 +950,6 @@ elif page == "🧠 Weekly Coach Recap":
             continue
         recent_best = float(l_df["top_e1rm"].max())
 
-        # History sequence for trend projection
         hist_seq = [
             (datetime.strptime(d, "%Y-%m-%d").date(), float(val))
             for d, val in zip(l_df["date"], l_df["top_e1rm"])
@@ -1227,7 +957,6 @@ elif page == "🧠 Weekly Coach Recap":
         tier_status = get_strength_tier(lift, recent_best, bodyweight_kg, recent_history=hist_seq)
 
         with t_cols[idx]:
-            # Compute progress percentage to next tier
             pct = 100.0
             if tier_status.next_threshold_ratio and tier_status.threshold_ratio:
                 range_span = tier_status.next_threshold_ratio - tier_status.threshold_ratio
@@ -1236,7 +965,7 @@ elif page == "🧠 Weekly Coach Recap":
 
             proj_text = tier_status.status_message
             if tier_status.is_projectable and tier_status.projected_weeks_low and tier_status.projected_weeks_high:
-                proj_text = f"~{tier_status.projected_weeks_low:.1f} to {tier_status.projected_weeks_high:.1f} weeks"
+                proj_text = f"~{tier_status.projected_weeks_low:.1f} to {tier_status.projected_weeks_high:.1f} wks"
 
             st.markdown(
                 f"""
@@ -1258,34 +987,23 @@ elif page == "🧠 Weekly Coach Recap":
 # -----------------------------------------------------------------------------
 # PAGE 4: Benchmark & Architecture
 # -----------------------------------------------------------------------------
-elif page == "🔬 Benchmark & Architecture":
-    st.markdown('<div class="hero-title">Benchmark & Architecture Explorer</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="hero-subtitle">Honest rolling-origin evaluation (§7.4) and standalone interactive architecture map rendered with Archify.</div>',
-        unsafe_allow_html=True,
-    )
+elif page == "Benchmark & Architecture":
+    st.title("Benchmark & Architecture")
+    st.caption("Rolling-origin backtest results and system architecture.")
 
-    tab_eval, tab_arch = st.tabs(["📊 Rolling-Origin Evaluation (§7.4)", "🗺️ Interactive Archify Architecture"])
+    tab_eval, tab_arch = st.tabs(["Rolling-Origin Backtest", "Architecture Diagram"])
 
     with tab_eval:
-        st.markdown("### 40-Point Rolling-Origin Evaluation Results")
-        st.markdown(
-            """
-            <div style="font-size:0.88rem; color:#94a3b8; margin-bottom:1rem;">
-                Evaluated across the <b>last 8 sessions</b> of the 5 core lifts (40 total out-of-sample predictions).
-                For every target date <code>d</code>, context consists strictly of rows prior to <code>d</code> (zero temporal leakage).
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        st.subheader("40-Point Rolling-Origin Backtest Results")
+        st.caption("Evaluated across the last 8 sessions of the 5 core lifts (40 out-of-sample predictions). Zero temporal leakage.")
 
         eval_summary_data = [
             {"Lift": "Lat Pulldown", "n": 8, "Last value MAE (kg)": 6.48, "Trend-5 MAE (kg)": 6.21, "TabPFN MAE (kg)": 10.84, "Winner": "Trend-5"},
-            {"Lift": "Bench Press", "n": 8, "Last value MAE (kg)": 8.78, "Trend-5 MAE (kg)": 11.08, "Winner": "Last value", "TabPFN MAE (kg)": 12.28},
-            {"Lift": "Deadlift", "n": 8, "Last value MAE (kg)": 10.97, "Trend-5 MAE (kg)": 12.81, "Winner": "Last value", "TabPFN MAE (kg)": 15.33},
-            {"Lift": "Bent Over Row", "n": 8, "Last value MAE (kg)": 12.94, "Trend-5 MAE (kg)": 10.33, "Winner": "Trend-5", "TabPFN MAE (kg)": 15.04},
-            {"Lift": "Romanian Deadlift", "n": 8, "Last value MAE (kg)": 6.87, "Trend-5 MAE (kg)": 8.44, "Winner": "Last value", "TabPFN MAE (kg)": 18.07},
-            {"Lift": "**Overall**", "n": 40, "Last value MAE (kg)": 9.21, "Trend-5 MAE (kg)": 9.78, "Winner": "**Last value**", "TabPFN MAE (kg)": 14.31},
+            {"Lift": "Bench Press", "n": 8, "Last value MAE (kg)": 8.78, "Trend-5 MAE (kg)": 11.08, "TabPFN MAE (kg)": 12.28, "Winner": "Last value"},
+            {"Lift": "Deadlift", "n": 8, "Last value MAE (kg)": 10.97, "Trend-5 MAE (kg)": 12.81, "TabPFN MAE (kg)": 15.33, "Winner": "Last value"},
+            {"Lift": "Bent Over Row", "n": 8, "Last value MAE (kg)": 12.94, "Trend-5 MAE (kg)": 10.33, "TabPFN MAE (kg)": 15.04, "Winner": "Trend-5"},
+            {"Lift": "Romanian Deadlift", "n": 8, "Last value MAE (kg)": 6.87, "Trend-5 MAE (kg)": 8.44, "TabPFN MAE (kg)": 18.07, "Winner": "Last value"},
+            {"Lift": "**Overall**", "n": 40, "Last value MAE (kg)": 9.21, "Trend-5 MAE (kg)": 9.78, "TabPFN MAE (kg)": 14.31, "Winner": "**Last value**"},
         ]
         eval_df = pd.DataFrame(eval_summary_data)
 
@@ -1296,9 +1014,9 @@ elif page == "🔬 Benchmark & Architecture":
             st.markdown(
                 """
                 <div class="glass-panel">
-                    <div style="font-weight:700; color:#38bdf8; margin-bottom:0.35rem;">1. Linear Trend Baseline Wins on Rows & Pulldowns</div>
+                    <div style="font-weight:700; color:#38bdf8; margin-bottom:0.35rem;">1. Linear Trend on Consistent Lifts</div>
                     <div style="font-size:0.82rem; color:#cbd5e1; line-height:1.5;">
-                        On near-linear movements (Lat Pulldown 6.21 kg MAE vs 6.48 kg; Bent Over Row 10.33 kg vs 12.94 kg), the 5-session trend baseline outperforms last-value and TabPFN.
+                        Lat Pulldown (6.21 kg MAE) and Bent Over Row (10.33 kg MAE) reward 5-session trend extrapolation over last-value.
                     </div>
                 </div>
                 """,
@@ -1309,9 +1027,9 @@ elif page == "🔬 Benchmark & Architecture":
             st.markdown(
                 """
                 <div class="glass-panel">
-                    <div style="font-weight:700; color:#34d399; margin-bottom:0.35rem;">2. Last Value Wins on Noisy Compounds</div>
+                    <div style="font-weight:700; color:#34d399; margin-bottom:0.35rem;">2. Last Value on Noisy Compounds</div>
                     <div style="font-size:0.82rem; color:#cbd5e1; line-height:1.5;">
-                        Bench Press (8.78 kg) and Deadlift (10.97 kg) exhibit discrete step-functions and warm-up variances that penalize linear extrapolation. The naive baseline is notoriously hard to beat.
+                        Bench Press (8.78 kg) and Deadlift (10.97 kg) have day-to-day variance that penalizes trend extrapolation. Last-value is hard to beat.
                     </div>
                 </div>
                 """,
@@ -1322,9 +1040,9 @@ elif page == "🔬 Benchmark & Architecture":
             st.markdown(
                 """
                 <div class="glass-panel">
-                    <div style="font-weight:700; color:#c084fc; margin-bottom:0.35rem;">3. TabPFN's Calibrated In-Context Prior</div>
+                    <div style="font-weight:700; color:#c084fc; margin-bottom:0.35rem;">3. TabPFN Uncertainty Intervals</div>
                     <div style="font-size:0.82rem; color:#cbd5e1; line-height:1.5;">
-                        TabPFN expresses lifts as ratios to prior bests to generalize across exercises without retraining, providing calibrated 95% uncertainty intervals for risk-aware forecasts.
+                        TabPFN provides calibrated 95% uncertainty intervals for risk-aware targets across disparate exercises.
                     </div>
                 </div>
                 """,
@@ -1335,14 +1053,7 @@ elif page == "🔬 Benchmark & Architecture":
         arch_html_path = Path("docs/assets/liftcast_architecture.html")
         if arch_html_path.exists():
             html_content = arch_html_path.read_text(encoding="utf-8")
-            st.markdown(
-                """
-                <div style="margin-bottom:0.75rem; font-size:0.85rem; color:#94a3b8;">
-                    Interactive system diagram rendered by Archify CLI with pan, zoom, click-to-inspect boundaries, and verified dark showcase styling:
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            st.caption("Interactive system architecture diagram (pan, zoom, and inspect components):")
             components.html(html_content, height=720, scrolling=True)
         else:
             st.error("Architecture diagram HTML not found at docs/assets/liftcast_architecture.html.")
