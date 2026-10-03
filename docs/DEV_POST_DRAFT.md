@@ -48,7 +48,7 @@ LiftCast features a modern dark glassmorphic Streamlit interface designed for qu
 ## 4. How I Built It
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/architecture.svg" alt="LiftCast System Architecture" width="100%">
+  <img src="https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/architecture.png" alt="LiftCast System Architecture" width="100%">
 </p>
 
 ### Local Hardware Profile
@@ -60,7 +60,7 @@ LiftCast features a modern dark glassmorphic Streamlit interface designed for qu
 We rejected arbitrary train/test splits that cause temporal leakage. Instead, we executed a rolling-origin backtest across the last 8 sessions for 5 key lifts (40 out-of-sample predictions):
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/evaluation_protocol.svg" alt="Rolling Origin Evaluation Protocol" width="100%">
+  <img src="https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/evaluation_protocol.png" alt="Rolling Origin Evaluation Protocol" width="100%">
 </p>
 
 | Lift | Test Sessions ($n$) | Last Value MAE (kg) | Trend-5 MAE (kg) | TabPFN MAE (kg) | Winner |
@@ -80,7 +80,7 @@ We rejected arbitrary train/test splits that cause temporal leakage. Instead, we
 ### Honest Failures & Postmortems
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/stall_detection.svg" alt="Stall Detection Empirical Comparison" width="100%">
+  <img src="https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/stall_detection.png" alt="Stall Detection Empirical Comparison" width="100%">
 </p>
 
 1. **The Flawed "PR in 21 Days" Stall Rule:** Our initial hypothesis was that lacking a PR within 3–4 sessions signified a stall. On real data, this rule flagged **22% to 78% of all workouts**! During a 6-month stretch where Bench rose from 42 kg to 64 kg, it flagged 61% of sessions as "stalled". We replaced it with a least-squares linear slope over 56 days with $m \ge 4$ sessions, which cleanly detects genuine plateaus without false positives.

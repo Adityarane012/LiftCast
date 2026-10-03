@@ -9,6 +9,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![Privacy: 100% Local](https://img.shields.io/badge/Privacy-100%25%20Offline%20%2F%20No%20Cloud-8b5cf6?style=for-the-badge)](CLAUDE.md)
 
+<p align="center">
+  <img src="docs/assets/liftcast_hero.png" alt="LiftCast Hero Banner" width="100%">
+</p>
+
 ---
 
 ## 🎯 The Real Problem
@@ -45,7 +49,7 @@ Because he never logs, he cannot answer the central question of strength trainin
 LiftCast follows an uncompromised design principle: **AI at the edges, deterministic math at the core.**
 
 <p align="center">
-  <img src="docs/assets/architecture.svg" alt="LiftCast System Architecture" width="100%">
+  <img src="docs/assets/architecture.png" alt="LiftCast System Architecture" width="100%">
 </p>
 
 > 💡 **Interactive Architecture Explorer:** You can also inspect the standalone, interactive architecture diagram with pan, zoom, and component inspection at [`docs/assets/liftcast_architecture.html`](docs/assets/liftcast_architecture.html) (or in Page 4 of the Streamlit app).
@@ -64,7 +68,7 @@ LiftCast follows an uncompromised design principle: **AI at the edges, determini
 An abstract forecast like *"e1RM = 82.5 kg"* is useless on the gym floor. Lifters need to know: **what weight goes on the bar for 8 reps, and which plates do I slide onto the sleeve?**
 
 <p align="center">
-  <img src="docs/assets/plate_loader_flow.svg" alt="Barbell Plate Loader Flow" width="100%">
+  <img src="docs/assets/plate_loader_flow.png" alt="Barbell Plate Loader Flow" width="100%">
 </p>
 
 1. **Epley Inversion:** `working_weight = forecast_e1rm / (1 + target_reps / 30)`.
@@ -79,7 +83,7 @@ An abstract forecast like *"e1RM = 82.5 kg"* is useless on the gym floor. Lifter
 We rejected random train/test splits, which cause fatal temporal leakage in time-series sports data. Instead, we executed a **rolling-origin backtest** across the last 8 sessions of each of the 5 core lifts (40 out-of-sample predictions).
 
 <p align="center">
-  <img src="docs/assets/evaluation_protocol.svg" alt="40-Point Rolling-Origin Backtest Protocol" width="100%">
+  <img src="docs/assets/evaluation_protocol.png" alt="40-Point Rolling-Origin Backtest Protocol" width="100%">
 </p>
 
 For every prediction at target date $t$, the model's context includes strictly sessions dated prior to $t$.
@@ -105,7 +109,7 @@ For every prediction at target date $t$, the model's context includes strictly s
 ## 📈 Stall Detection: Why We Killed the Naive PR Rule (§8)
 
 <p align="center">
-  <img src="docs/assets/stall_detection.svg" alt="Stall Detection Empirical Comparison" width="100%">
+  <img src="docs/assets/stall_detection.png" alt="Stall Detection Empirical Comparison" width="100%">
 </p>
 
 ### The Failure of "No PR in 3–4 Weeks"
