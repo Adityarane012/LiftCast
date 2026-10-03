@@ -42,7 +42,7 @@ They would send data off the laptop and weaken the core "runs locally, data stay
   Use Ollama's `format=<JSON schema>` for structured parsing.
 - UI: Streamlit. Storage: SQLite (stdlib `sqlite3`). Tests: pytest.
 
-## Data facts (Liftoff export, my own data — used to validate; Armaan starts logging now)
+## Data facts (Liftoff export historical baseline — used to validate; Armaan starts logging now)
 - Columns: Date, Duration, Workout Name, Exercise Name, Set Order, Weight, Reps, Distance, Seconds, RPE, Notes.
 - 5,559 sets, 308 workout days, Feb 2025 – Oct 2026, 113 exercises.
 - Exclude: Weight == 0, Reps == 0, cardio (Distance > 0 or Seconds > 0). RPE ~empty → don't use.
@@ -131,6 +131,6 @@ Keep `raw_text` for every manually logged set (debugging + honest-failure sectio
   model would likely write smoother text.
 
 ## Working style
-- I (Aditya) drive implementation decisions. Explain reasoning and trade-offs before significant changes.
+- The maintainer drives implementation decisions. Explain reasoning and trade-offs before significant changes.
 - Prefer small, reviewable commits with meaningful messages.
 - Prefer simple, readable code over clever code; pure functions in the core.

@@ -111,8 +111,8 @@ Evaluated across the last 8 sessions of the 5 core lifts (40 out-of-sample predi
 ### 2. Setup Virtual Environment
 ```bash
 # Clone the repository
-git clone https://github.com/adityarane012/Hacktoberfest26.git
-cd Hacktoberfest26
+git clone https://github.com/Adityarane012/LiftCast.git
+cd LiftCast
 
 # Create and activate virtual environment
 python -m venv .venv
@@ -135,7 +135,7 @@ Open [http://localhost:8501](http://localhost:8501) in your browser.
 $env:PYTHONPATH="src"
 pytest -q
 ```
-All **29 tests** should pass in ~7 seconds.
+All **51 tests** should pass in ~8 seconds.
 
 ---
 

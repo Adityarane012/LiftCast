@@ -35,6 +35,12 @@ data/raw/
 liftoff_workout_data.csv
 *liftoff*.csv
 data/*.csv
+*.csv
+
+# Internal Progress Trackers
+PROGRESS.md
+progress.md
+PROGRESS*.md
 
 # Node / JS
 node_modules/

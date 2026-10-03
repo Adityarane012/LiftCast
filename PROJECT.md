@@ -56,7 +56,7 @@ his forecast, and whether anything is stalling — with no data leaving his lapt
 ## 4. System overview
 
 ```
-           free text                    Liftoff CSV (my history, validation only)
+           free text                    Liftoff CSV (historical data, validation only)
                │                                   │
          parser.py (Gemma/Ollama,            importer.py (filters, ÷2.2, drop
          JSON schema) ──confirm──┐            private columns)
@@ -375,9 +375,9 @@ Run: `pytest -q`. Core modules (`metrics`, `detect`, importer transforms) should
 
 | # | Decision | Owner | Blocks |
 |---|---|---|---|
-| D1 | Collect Armaan's 5 log lines | Aditya | parser fixtures |
-| D2 | Confirm lb export factor in Liftoff | Aditya | importer constant |
-| D3 | Stall config via §8.3 | Aditya | detect.py |
-| D4 | Strength-standards source + tier names | Aditya | tiers |
-| D5 | E2B vs E4B (quality on fixtures, speed) | Aditya | default model |
-| D6 | Mention tendinopathy dip in post or not | Aditya | write-up |
+| D1 | Collect Armaan's 5 log lines | Maintainer | parser fixtures |
+| D2 | Confirm lb export factor in Liftoff | Maintainer | importer constant |
+| D3 | Stall config via §8.3 | Maintainer | detect.py |
+| D4 | Strength-standards source + tier names | Maintainer | tiers |
+| D5 | E2B vs E4B (quality on fixtures, speed) | Maintainer | default model |
+| D6 | Mention historical plateau dip in post or not | Maintainer | write-up |
