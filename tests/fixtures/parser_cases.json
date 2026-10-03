@@ -1,0 +1,89 @@
+[
+  {
+    "input": "bench 60 8 8 7, last set died",
+    "expected_entries": [
+      {
+        "exercise": "Bench Press",
+        "weight_kg": 60.0,
+        "reps": [8, 8, 7],
+        "note": "last set died"
+      }
+    ]
+  },
+  {
+    "input": "bp 80kg 5 5 5",
+    "expected_entries": [
+      {
+        "exercise": "Bench Press",
+        "weight_kg": 80.0,
+        "reps": [5, 5, 5]
+      }
+    ]
+  },
+  {
+    "input": "bech 60 8 8 8",
+    "expected_entries": [
+      {
+        "exercise": "Bench Press",
+        "weight_kg": 60.0,
+        "reps": [8, 8, 8]
+      }
+    ]
+  },
+  {
+    "input": "aaj bench 60 pe 8 reps",
+    "expected_entries": [
+      {
+        "exercise": "Bench Press",
+        "weight_kg": 60.0,
+        "reps": [8]
+      }
+    ]
+  },
+  {
+    "input": "bench 135 lb 5 5 5",
+    "expected_entries": [
+      {
+        "exercise": "Bench Press",
+        "weight_kg": 61.36,
+        "reps": [5, 5, 5]
+      }
+    ]
+  },
+  {
+    "input": "deadlift 120 5 reps felt good",
+    "expected_entries": [
+      {
+        "exercise": "Deadlift",
+        "weight_kg": 120.0,
+        "reps": [5],
+        "note": "felt good"
+      }
+    ]
+  },
+  {
+    "input": "lat pulldown 50 10 10 10",
+    "expected_entries": [
+      {
+        "exercise": "Lat Pulldown",
+        "weight_kg": 50.0,
+        "reps": [10, 10, 10]
+      }
+    ]
+  },
+  {
+    "input": "bench 60 8 8 and deadlift 100 5",
+    "expected_entries": [
+      {
+        "exercise": "Bench Press",
+        "weight_kg": 60.0,
+        "reps": [8, 8]
+      },
+      {
+        "exercise": "Deadlift",
+        "weight_kg": 100.0,
+        "reps": [5]
+      }
+    ]
+  }
+]
