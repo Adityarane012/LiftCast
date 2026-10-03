@@ -3,9 +3,11 @@
 > **A local-first AI workout logger and progress forecaster, built for my friend Armaan.**  
 > *Entry for the DEV Hacktoberfest Weekend Challenge: "Build for a Friend"*
 
-[![Tests: Passing](https://img.shields.io/badge/pytest-51%20passed-10b981?style=for-the-badge&logo=pytest)](file:///c:/Users/Aditya%20Rane/Downloads/Hacktoberfest26/tests/)
-[![Architecture: Archify](https://img.shields.io/badge/Architecture-Archify%20Interactive-38bdf8?style=for-the-badge)](file:///c:/Users/Aditya%20Rane/Downloads/Hacktoberfest26/docs/assets/liftcast_architecture.html)
-[![Privacy: 100% Local](https://img.shields.io/badge/Privacy-100%25%20Offline%20%2F%20No%20Cloud-8b5cf6?style=for-the-badge)](file:///c:/Users/Aditya%20Rane/Downloads/Hacktoberfest26/CLAUDE.md)
+[![CI](https://img.shields.io/github/actions/workflow/status/Adityarane012/LiftCast/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Adityarane012/LiftCast/actions)
+[![Tests: Passing](https://img.shields.io/badge/pytest-51%20passed-10b981?style=for-the-badge&logo=pytest)](tests/)
+[![Python: 3.11 | 3.12 | 3.13](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://github.com/Adityarane012/LiftCast)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![Privacy: 100% Local](https://img.shields.io/badge/Privacy-100%25%20Offline%20%2F%20No%20Cloud-8b5cf6?style=for-the-badge)](CLAUDE.md)
 
 ---
 
@@ -36,6 +38,7 @@ Because he never logs, he has no answer to the most important question in streng
 |---|---|
 | **Best Use of Gemma** | Runs locally via Ollama (`gemma4:e2b` / `gemma4:e4b`). Uses Ollama's structured JSON schema to parse free-form shorthand and Hinglish logs. Generates weekly coach recaps with an enforced regex numeric guard against hallucinated stats. |
 | **Best Use of TabPFN** | Runs locally on CPU. In-context prior predicts next-session top-set e1RM scaled as a ratio to historical best across disparate lifts, providing calibrated 95% uncertainty intervals evaluated via a 40-point rolling-origin backtest. |
+| **Best Use of GitHub** | Comprehensive CI matrix testing across Python 3.11, 3.12, and 3.13 on GitHub Actions. Automated verification of 51 test suites, PR templates with strict data privacy auditing, issue templates, and open-source contribution governance. |
 
 ---
 

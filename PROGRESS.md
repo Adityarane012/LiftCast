@@ -78,6 +78,14 @@ Autonomous development tracker following the Ralph Loop workflow.
   - [x] Page 4: Benchmark & Architecture explorer (eval table + embedded Archify interactive diagram)
 
 - [x] **Iteration 11: End-to-End Verification & Documentation**
-  - [x] `pytest -q` passing on all test suites
+  - [x] `pytest -q` passing on all test suites (51 tests)
   - [x] `docs/WRITEUP_NOTES.md` updated with real numbers, eval table, honest failures
   - [x] `README.md` with complete instructions and offline execution guide
+
+- [x] **Iteration 12: GitHub CI/CD Matrix & Open Source Governance (Best Use of GitHub)**
+  - [x] Automated GitHub Actions workflow (`.github/workflows/ci.yml`) testing Python 3.11, 3.12, 3.13 matrix
+  - [x] PR template with strict privacy checklist and zero-data-leakage verification
+  - [x] Issue templates for bug tracking and feature requests
+  - [x] MIT License and `CONTRIBUTING.md` guidelines
+  - [x] Status badges updated in `README.md`
+
