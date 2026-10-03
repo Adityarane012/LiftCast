@@ -2,7 +2,7 @@
 title: "Building LiftCast: A Local-First AI Workout Forecaster for My Friend Armaan"
 published: false
 description: "A 100% local workout logger that lets my friend Armaan log sets in 10 seconds using Gemma 4, forecasts progress via TabPFN, and detects strength stalls deterministically."
-tags: hacktoberfest, gemma, tabpfn, github, python
+tags: hacktoberfest, gemma, tabpfn, elevenlabs, github, python
 canonical_url: https://github.com/Adityarane012/LiftCast
 cover_image: https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/liftcast_hero.png
 ai_disclosure_level: some_ai
@@ -121,9 +121,15 @@ Gemma runs locally via Ollama (`gemma4:e2b`). It powers two core interfaces:
 ### Best Use of TabPFN
 TabPFN runs locally on CPU as an in-context tabular foundation model. By normalizing performance into ratio-space (`e1rm / best_so_far`), TabPFN transfers learned priors across exercises, outputting calibrated 95% prediction intervals evaluated honestly via rolling-origin backtesting.
 
+### Best Use of ElevenLabs
+Lifters in the gym have chalk on their hands and are re-racking heavy weights. Staring at paragraphs of text on a mobile screen while catching your breath is counter-productive:
+- **Gym Earbuds Briefing:** Synthesizes a punchy 10-second post-workout audio briefing via ElevenLabs neural TTS (model: `eleven_turbo_v2_5`, voice: Adam), playable and downloadable in-app.
+- **Strict Zero-Leakage Privacy:** Only the 2-sentence, already-sanitized coach script is sent to the TTS API. Zero database records, zero timestamps, and zero health notes leave the machine.
+- **Offline Browser Speech Fallback:** Includes a zero-network in-browser Web Speech API fallback for lifters without an API key or training in offline gym basements.
+
 ### Best Use of GitHub
 LiftCast leverages GitHub for rigorous open-source engineering and community participation:
-- **Matrix CI Testing:** GitHub Actions workflow (`.github/workflows/ci.yml`) runs the full 51-test suite across Python 3.11, 3.12, and 3.13 on every push and pull request.
+- **Matrix CI Testing:** GitHub Actions workflow (`.github/workflows/ci.yml`) runs the full 58-test suite across Python 3.11, 3.12, and 3.13 on every push and pull request.
 - **Privacy & Quality Gates:** Custom PR template (`.github/PULL_REQUEST_TEMPLATE.md`) with explicit verification gates against data leakage and hallucinated numbers.
 - **Open-Source Health:** Issue templates for bug tracking and feature requests, comprehensive `CONTRIBUTING.md`, and MIT License.
 

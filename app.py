@@ -8,6 +8,7 @@ Local Gemma parses free text; local TabPFN forecasts progress; deterministic cor
 from __future__ import annotations
 
 import html
+import os
 from datetime import date, datetime, timedelta
 from pathlib import Path
 import time
@@ -18,6 +19,11 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from liftcast.coach import generate_coach_summary
+from liftcast.voice import (
+    DEFAULT_VOICE_ID,
+    build_audio_briefing_script,
+    synthesize_voice_elevenlabs,
+)
 from liftcast.db import (
     DEFAULT_ALIASES,
     get_all_sessions,
@@ -238,11 +244,27 @@ with st.sidebar:
         <div style="background:rgba(15, 23, 42, 0.6); padding:0.75rem; border-radius:8px; border:1px solid rgba(255,255,255,0.05); font-size:0.78rem; color:#94a3b8; margin-top:0.5rem;">
             <div><b>GPU:</b> RTX 3050 (4 GB VRAM) — Gemma</div>
             <div><b>CPU:</b> TabPFN In-Context Forecaster</div>
+            <div><b>Voice:</b> ElevenLabs TTS & Browser Speech</div>
             <div><b>Zero Cloud:</b> No telemetry, no egress</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+
+    with st.expander("🎙️ ElevenLabs Voice (Optional)", expanded=False):
+        st.text_input(
+            "API Key",
+            value=os.environ.get("ELEVENLABS_API_KEY", ""),
+            type="password",
+            help="Optional: Enables ultra-realistic neural TTS voice for gym earbuds. Leave empty to use 100% offline browser speech.",
+            key="elevenlabs_api_key_input",
+        )
+        st.selectbox(
+            "Coach Voice",
+            options=["pNInz6obpgDQGcFmaJgB", "21m00Tcm4TlvDq8ikWAM"],
+            format_func=lambda x: "Adam (Athletic Coach)" if "pNIn" in x else "Rachel (Calm Technical)",
+            key="elevenlabs_voice_choice",
+        )
 
     # Database quick stats
     sessions_all = get_all_sessions(conn)
@@ -846,6 +868,94 @@ elif page == "🧠 Weekly Coach Recap":
             """,
             unsafe_allow_html=True,
         )
+
+        # ---------------------------------------------------------------------
+        # ElevenLabs Audio Briefing for Gym Earbuds
+        # ---------------------------------------------------------------------
+        st.markdown("### 🔊 Coach Voice Briefing (Gym Earbuds)")
+        st.markdown(
+            "<div style='font-size:0.85rem; color:#94a3b8; margin-bottom:0.75rem;'>"
+            "Hands chalky? Packing your gym bag? Listen to a punchy 10-second recap generated from verified numbers."
+            "</div>",
+            unsafe_allow_html=True,
+        )
+
+        audio_script = build_audio_briefing_script(stats_payload, user_name="Armaan")
+
+        col_voice_btn, col_voice_info = st.columns([1, 2])
+        with col_voice_btn:
+            generate_voice_clicked = st.button("🎙️ Play Coach Voice Note", use_container_width=True)
+        with col_voice_info:
+            active_key = st.session_state.get(
+                "elevenlabs_api_key_input", os.environ.get("ELEVENLABS_API_KEY", "")
+            ).strip()
+            if active_key:
+                st.markdown('<span class="badge badge-cyan">⚡ ElevenLabs Neural TTS Ready</span>', unsafe_allow_html=True)
+            else:
+                st.markdown('<span class="badge badge-emerald">🔒 100% Offline Browser Speech Ready</span>', unsafe_allow_html=True)
+
+        if generate_voice_clicked or "voice_briefing_result" in st.session_state:
+            if generate_voice_clicked:
+                with st.spinner("Synthesizing audio briefing..."):
+                    active_key = st.session_state.get(
+                        "elevenlabs_api_key_input", os.environ.get("ELEVENLABS_API_KEY", "")
+                    ).strip()
+                    v_choice = st.session_state.get("elevenlabs_voice_choice", DEFAULT_VOICE_ID)
+                    voice_res = synthesize_voice_elevenlabs(
+                        script=audio_script,
+                        api_key=active_key if active_key else None,
+                        voice_id=v_choice,
+                    )
+                    st.session_state["voice_briefing_result"] = voice_res
+
+            v_result = st.session_state["voice_briefing_result"]
+
+            st.markdown(
+                f"""
+                <div class="glass-panel" style="margin-top:0.5rem; border-left:4px solid #10b981;">
+                    <div style="font-weight:700; color:#f8fafc; font-size:0.95rem; margin-bottom:0.4rem;">
+                        🎧 Earbud Briefing Transcript:
+                    </div>
+                    <div style="font-size:0.95rem; line-height:1.5; color:#cbd5e1; font-style:italic; margin-bottom:0.75rem;">
+                        "{html.escape(v_result.script)}"
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            if v_result.audio_bytes:
+                st.audio(v_result.audio_bytes, format="audio/mp3", autoplay=True)
+                st.download_button(
+                    "⬇️ Download Coach Audio Note (.mp3)",
+                    data=v_result.audio_bytes,
+                    file_name=f"liftcast_coach_{latest_dt.strftime('%Y%m%d')}.mp3",
+                    mime="audio/mp3",
+                )
+            else:
+                # Browser SpeechSynthesis fallback button using safe HTML/JS
+                safe_script_js = v_result.script.replace("'", "\\'").replace('"', '\\"').replace("\n", " ")
+                components.html(
+                    f"""
+                    <div style="display:flex; align-items:center; gap:12px; font-family:sans-serif;">
+                        <button onclick="
+                            if ('speechSynthesis' in window) {{
+                                window.speechSynthesis.cancel();
+                                var msg = new SpeechSynthesisUtterance('{safe_script_js}');
+                                msg.rate = 1.05;
+                                msg.pitch = 1.0;
+                                window.speechSynthesis.speak(msg);
+                            }} else {{
+                                alert('Browser does not support speech synthesis.');
+                            }}
+                        " style="background:#0284c7; color:#ffffff; font-weight:700; padding:10px 18px; border-radius:8px; border:none; cursor:pointer; font-size:14px; box-shadow:0 4px 6px rgba(0,0,0,0.3);">
+                            🔊 Speak Aloud (Offline Browser Earbuds)
+                        </button>
+                        <span style="color:#94a3b8; font-size:13px;">Using zero-network offline browser voice</span>
+                    </div>
+                    """,
+                    height=55,
+                )
 
     # -------------------------------------------------------------------------
     # Strength Tiers & Projections Section
