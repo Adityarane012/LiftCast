@@ -77,13 +77,11 @@ def detect_stalls(
         ys = window_df["top_e1rm"].values.astype(float)
 
         mean_y = float(np.mean(ys))
-        var_x = float(np.var(xs))
-
-        if var_x < 1e-6 or mean_y <= 0:
+        if np.std(xs) < 1e-4 or mean_y <= 0:
             slope_pct = 0.0
         else:
-            slope = float(np.cov(xs, ys)[0, 1] / var_x)
-            slope_pct = round((slope / mean_y) * 100.0, 3)
+            slope, _ = np.polyfit(xs, ys, 1)
+            slope_pct = round((float(slope) / mean_y) * 100.0, 3)
 
         is_stalled = bool(slope_pct < theta_pct_week)
 

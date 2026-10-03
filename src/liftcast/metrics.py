@@ -277,6 +277,21 @@ def get_strength_tier(
     next_threshold_kg = round(next_threshold_ratio * bodyweight_kg, 1)
     kg_needed = next_threshold_kg - recent_best_e1rm
 
+    if kg_needed <= 0:
+        return TierStatus(
+            current_tier=current_tier,
+            next_tier=next_tier,
+            current_ratio=ratio,
+            threshold_ratio=threshold_ratio,
+            next_threshold_ratio=next_threshold_ratio,
+            current_e1rm=recent_best_e1rm,
+            next_threshold_kg=next_threshold_kg,
+            projected_weeks_low=0.0,
+            projected_weeks_high=0.0,
+            is_projectable=True,
+            status_message="Next tier threshold reached!",
+        )
+
     # Time projection based on recent trend (last 8-12 weeks)
     projected_weeks_low = None
     projected_weeks_high = None
@@ -301,10 +316,10 @@ def get_strength_tier(
             se_slope = s_err / (np.sqrt(np.sum((xs - np.mean(xs)) ** 2)) + 1e-8)
 
             if slope > 0.05:  # Positive progression (> 50g/week)
-                slope_low = max(0.01, slope - se_slope)
+                slope_low = max(0.05, slope - se_slope)
                 slope_high = slope + se_slope
-                projected_weeks_low = round(kg_needed / slope_high, 1)
-                projected_weeks_high = round(kg_needed / slope_low, 1)
+                projected_weeks_low = round(max(0.5, kg_needed / slope_high), 1)
+                projected_weeks_high = round(min(104.0, kg_needed / slope_low), 1)
                 is_projectable = True
                 status_msg = f"Projected in {projected_weeks_low:.0f}–{projected_weeks_high:.0f} weeks at current pace"
 
