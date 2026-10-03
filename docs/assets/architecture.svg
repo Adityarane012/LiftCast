@@ -1,0 +1,255 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080C14"/>
+      <stop offset="50%" stop-color="#0D131F"/>
+      <stop offset="100%" stop-color="#080C14"/>
+    </linearGradient>
+    <linearGradient id="edgeAiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284C7" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0369A1" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="mathGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#047857" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="tabpfnGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#6D28D9" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="actionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D97706" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#B45309" stop-opacity="0.05"/>
+    </linearGradient>
+
+    <!-- Marker Arrowheads -->
+    <marker id="arrow-cyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38BDF8"/>
+    </marker>
+    <marker id="arrow-emerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34D399"/>
+    </marker>
+    <marker id="arrow-violet" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#A78BFA"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#FBBF24"/>
+    </marker>
+    <marker id="arrow-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748B"/>
+    </marker>
+
+    <!-- Subtle Dot Grid Pattern -->
+    <pattern id="dotPattern" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#1E293B" opacity="0.6"/>
+    </pattern>
+  </defs>
+
+  <style>
+    .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 22px; font-weight: 700; fill: #F8FAFC; letter-spacing: -0.5px; }
+    .subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; font-weight: 400; fill: #94A3B8; }
+    .tag { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .node-title { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 13px; font-weight: 700; fill: #F1F5F9; }
+    .node-sub { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; fill: #94A3B8; }
+    .edge-label { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 10px; fill: #94A3B8; font-weight: 500; }
+    .boundary-label { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 11px; font-weight: 600; fill: #64748B; letter-spacing: 1px; }
+    .card-title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12px; font-weight: 700; }
+    .card-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; fill: #94A3B8; line-height: 1.4; }
+  </style>
+
+  <!-- Background Base -->
+  <rect width="1200" height="680" rx="16" fill="url(#bgGrad)"/>
+  <rect width="1200" height="680" rx="16" fill="url(#dotPattern)"/>
+  <rect width="1200" height="680" rx="16" fill="none" stroke="#1E293B" stroke-width="1.5"/>
+
+  <!-- Top Header -->
+  <g transform="translate(40, 42)">
+    <text class="title" x="0" y="0">⚡ LiftCast System Architecture</text>
+    <text class="subtitle" x="0" y="22">AI at the edges, deterministic math at the core • 100% offline &amp; private</text>
+    
+    <!-- Header Badges -->
+    <g transform="translate(740, -14)">
+      <rect x="0" y="0" width="105" height="24" rx="12" fill="#0284C7" fill-opacity="0.15" stroke="#38BDF8" stroke-width="1"/>
+      <text class="tag" x="52" y="15" fill="#38BDF8" text-anchor="middle">EDGE AI: GEMMA</text>
+      
+      <rect x="115" y="0" width="115" height="24" rx="12" fill="#7C3AED" fill-opacity="0.15" stroke="#A78BFA" stroke-width="1"/>
+      <text class="tag" x="172" y="15" fill="#A78BFA" text-anchor="middle">PRIOR: TABPFN</text>
+      
+      <rect x="240" y="0" width="140" height="24" rx="12" fill="#059669" fill-opacity="0.15" stroke="#34D399" stroke-width="1"/>
+      <text class="tag" x="310" y="15" fill="#34D399" text-anchor="middle">PURE MATH ENGINE</text>
+    </g>
+  </g>
+
+  <!-- Hardware Boundary Outer Box -->
+  <g transform="translate(40, 85)">
+    <rect x="0" y="0" width="1120" height="425" rx="12" fill="#0A0F1D" fill-opacity="0.8" stroke="#1E293B" stroke-width="1.5" stroke-dasharray="6,4"/>
+    <rect x="16" y="-10" width="480" height="20" rx="4" fill="#0F172A" stroke="#334155" stroke-width="1"/>
+    <text class="boundary-label" x="24" y="4">🔒 LOCAL HARDWARE BOUNDARY • RTX 3050 (4GB VRAM) • ZERO CLOUD EGRESS</text>
+
+    <!-- COLUMN 1: USER INPUT -->
+    <g transform="translate(30, 45)">
+      <!-- Armaan Input Node -->
+      <rect x="0" y="0" width="160" height="90" rx="8" fill="#111827" stroke="#374151" stroke-width="1.5"/>
+      <rect x="12" y="12" width="28" height="28" rx="6" fill="#374151" fill-opacity="0.5"/>
+      <text x="26" y="31" font-size="16" text-anchor="middle">📱</text>
+      <text class="node-title" x="48" y="26">Armaan (User)</text>
+      <text class="node-sub" x="48" y="42">Informal 10s log</text>
+      <rect x="12" y="58" width="136" height="20" rx="4" fill="#1F2937"/>
+      <text class="edge-label" x="20" y="72" fill="#9CA3AF">"bench 60 8 8 7"</text>
+
+      <!-- Liftoff Importer Node -->
+      <g transform="translate(0, 180)">
+        <rect x="0" y="0" width="160" height="90" rx="8" fill="#111827" stroke="#374151" stroke-width="1.5"/>
+        <rect x="12" y="12" width="28" height="28" rx="6" fill="#374151" fill-opacity="0.5"/>
+        <text x="26" y="31" font-size="16" text-anchor="middle">📂</text>
+        <text class="node-title" x="48" y="26">importer.py</text>
+        <text class="node-sub" x="48" y="42">Liftoff CSV Sanitizer</text>
+        <rect x="12" y="58" width="136" height="20" rx="4" fill="#1F2937"/>
+        <text class="edge-label" x="20" y="72" fill="#EF4444">Stripped Notes &amp; Names</text>
+      </g>
+    </g>
+
+    <!-- COLUMN 2: PARSER & SQLITE -->
+    <g transform="translate(240, 45)">
+      <!-- Gemma Parser Node -->
+      <rect x="0" y="0" width="180" height="90" rx="8" fill="url(#edgeAiGrad)" stroke="#0284C7" stroke-width="1.5"/>
+      <rect x="12" y="10" width="70" height="18" rx="4" fill="#0369A1"/>
+      <text class="tag" x="47" y="22" fill="#E0F2FE" text-anchor="middle">EDGE AI</text>
+      <text class="node-title" x="12" y="46">parser.py (Gemma)</text>
+      <text class="node-sub" x="12" y="62">Local Ollama • JSON Schema</text>
+      <text class="edge-label" x="12" y="78" fill="#38BDF8">Latency: ~240ms (GPU)</text>
+
+      <!-- SQLite Storage Node -->
+      <g transform="translate(0, 180)">
+        <rect x="0" y="0" width="180" height="90" rx="8" fill="url(#mathGrad)" stroke="#059669" stroke-width="1.5"/>
+        <rect x="12" y="10" width="60" height="18" rx="4" fill="#047857"/>
+        <text class="tag" x="42" y="22" fill="#D1FAE5" text-anchor="middle">SQLITE</text>
+        <text class="node-title" x="12" y="46">db.py (Local DB)</text>
+        <text class="node-sub" x="12" y="62">Sessions, Sets, Aliases</text>
+        <text class="edge-label" x="12" y="78" fill="#34D399">Zero Network Calls</text>
+      </g>
+    </g>
+
+    <!-- COLUMN 3: DETERMINISTIC CORE -->
+    <g transform="translate(470, 110)">
+      <rect x="0" y="0" width="190" height="160" rx="8" fill="url(#mathGrad)" stroke="#10B981" stroke-width="2"/>
+      <rect x="12" y="12" width="120" height="20" rx="4" fill="#065F46"/>
+      <text class="tag" x="72" y="25" fill="#A7F3D0" text-anchor="middle">DETERMINISTIC CORE</text>
+      
+      <text class="node-title" x="14" y="56">metrics.py</text>
+      <text class="node-sub" x="14" y="72">• Epley: w*(1+r/30)</text>
+      <text class="node-sub" x="14" y="88">• Top-set per day</text>
+      <text class="node-sub" x="14" y="104">• Leakage-free features</text>
+      <text class="node-sub" x="14" y="120">• Strength Tier ratios</text>
+      <text class="edge-label" x="14" y="145" fill="#34D399">100% Deterministic Math</text>
+    </g>
+
+    <!-- COLUMN 4: FORECASTER & STALL DETECTOR -->
+    <g transform="translate(710, 45)">
+      <!-- TabPFN Node -->
+      <rect x="0" y="0" width="180" height="90" rx="8" fill="url(#tabpfnGrad)" stroke="#8B5CF6" stroke-width="1.5"/>
+      <rect x="12" y="10" width="80" height="18" rx="4" fill="#6D28D9"/>
+      <text class="tag" x="52" y="22" fill="#EDE9FE" text-anchor="middle">CPU IN-CONTEXT</text>
+      <text class="node-title" x="12" y="46">forecast.py</text>
+      <text class="node-sub" x="12" y="62">TabPFN Forecaster</text>
+      <text class="edge-label" x="12" y="78" fill="#C4B5FD">95% Prediction Interval</text>
+
+      <!-- Detect Stall Node -->
+      <g transform="translate(0, 180)">
+        <rect x="0" y="0" width="180" height="90" rx="8" fill="url(#mathGrad)" stroke="#10B981" stroke-width="1.5"/>
+        <rect x="12" y="10" width="85" height="18" rx="4" fill="#065F46"/>
+        <text class="tag" x="54" y="22" fill="#A7F3D0" text-anchor="middle">LINEAR FIT</text>
+        <text class="node-title" x="12" y="46">detect.py</text>
+        <text class="node-sub" x="12" y="62">56-Day Slope &lt; 0.0%/wk</text>
+        <text class="edge-label" x="12" y="78" fill="#34D399">Discrimination Ratio: 2.1x</text>
+      </g>
+    </g>
+
+    <!-- COLUMN 5: PRESENTATION & ACTIONS -->
+    <g transform="translate(940, 25)">
+      <!-- Streamlit App UI Node -->
+      <rect x="0" y="0" width="155" height="75" rx="8" fill="#1E293B" stroke="#64748B" stroke-width="1.5"/>
+      <text class="node-title" x="14" y="28">app.py</text>
+      <text class="node-sub" x="14" y="44">Streamlit UI</text>
+      <text class="edge-label" x="14" y="60" fill="#94A3B8">Dark Glassmorphic</text>
+
+      <!-- Coach Node with Numeric Guard -->
+      <g transform="translate(0, 90)">
+        <rect x="0" y="0" width="155" height="75" rx="8" fill="url(#edgeAiGrad)" stroke="#0284C7" stroke-width="1.5"/>
+        <text class="node-title" x="14" y="28">coach.py</text>
+        <text class="node-sub" x="14" y="44">Gemma Narration</text>
+        <text class="edge-label" x="14" y="60" fill="#38BDF8">🛡️ Regex Numeric Guard</text>
+      </g>
+
+      <!-- Visual Barbell Plate Loader -->
+      <g transform="translate(0, 180)">
+        <rect x="0" y="0" width="155" height="75" rx="8" fill="url(#actionGrad)" stroke="#F59E0B" stroke-width="1.5"/>
+        <text class="node-title" x="14" y="28">plate_loader.py</text>
+        <text class="node-sub" x="14" y="44">Barbell Visualizer</text>
+        <text class="edge-label" x="14" y="60" fill="#FBBF24">2.5kg Plate Breakdown</text>
+      </g>
+
+      <!-- Voice Coach Node -->
+      <g transform="translate(0, 270)">
+        <rect x="0" y="0" width="155" height="75" rx="8" fill="url(#actionGrad)" stroke="#F59E0B" stroke-width="1.5"/>
+        <text class="node-title" x="14" y="28">voice.py</text>
+        <text class="node-sub" x="14" y="44">10s Earbud Audio</text>
+        <text class="edge-label" x="14" y="60" fill="#FBBF24">ElevenLabs + Browser TTS</text>
+      </g>
+    </g>
+
+    <!-- CONNECTING FLOW LINES (Orthogonal, Clear, Styled) -->
+    <!-- Armaan -> Parser -->
+    <path d="M 190 90 L 240 90" stroke="#38BDF8" stroke-width="2" fill="none" marker-end="url(#arrow-cyan)"/>
+    <!-- Parser -> SQLite -->
+    <path d="M 330 135 L 330 180" stroke="#38BDF8" stroke-width="2" fill="none" marker-end="url(#arrow-cyan)"/>
+    <!-- Importer -> SQLite -->
+    <path d="M 190 270 L 240 270" stroke="#64748B" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#arrow-slate)"/>
+    <!-- SQLite -> Metrics -->
+    <path d="M 420 225 L 470 200" stroke="#34D399" stroke-width="2" fill="none" marker-end="url(#arrow-emerald)"/>
+    <!-- Metrics -> TabPFN -->
+    <path d="M 660 160 L 710 90" stroke="#A78BFA" stroke-width="2" fill="none" marker-end="url(#arrow-violet)"/>
+    <!-- Metrics -> Detect -->
+    <path d="M 660 220 L 710 240" stroke="#34D399" stroke-width="2" fill="none" marker-end="url(#arrow-emerald)"/>
+    <!-- TabPFN -> Coach -->
+    <path d="M 890 90 L 915 90 L 915 125 L 940 125" stroke="#A78BFA" stroke-width="1.5" fill="none" marker-end="url(#arrow-violet)"/>
+    <!-- Detect -> Coach -->
+    <path d="M 890 240 L 915 240 L 915 135 L 940 135" stroke="#34D399" stroke-width="1.5" fill="none" marker-end="url(#arrow-emerald)"/>
+    <!-- TabPFN -> Plate Loader -->
+    <path d="M 890 100 L 915 100 L 915 220 L 940 220" stroke="#FBBF24" stroke-width="1.5" fill="none" marker-end="url(#arrow-amber)"/>
+    <!-- Coach -> Voice -->
+    <path d="M 1017 165 L 1017 270" stroke="#FBBF24" stroke-width="1.5" fill="none" marker-end="url(#arrow-amber)"/>
+  </g>
+
+  <!-- Bottom 3 Editorial Architectural Pillar Cards -->
+  <g transform="translate(40, 530)">
+    <!-- Card 1 -->
+    <rect x="0" y="0" width="350" height="110" rx="8" fill="#0F172A" stroke="#1E293B" stroke-width="1"/>
+    <circle cx="20" cy="24" r="5" fill="#38BDF8"/>
+    <text class="card-title" x="34" y="28" fill="#F8FAFC">100% Offline &amp; Private by Design</text>
+    <text class="card-text" x="20" y="52">Runs strictly on local hardware (4GB VRAM laptop).</text>
+    <text class="card-text" x="20" y="70">Health notes and names stripped before SQLite.</text>
+    <text class="card-text" x="20" y="88">Gemma via Ollama, TabPFN pinned to CPU.</text>
+
+    <!-- Card 2 -->
+    <g transform="translate(385, 0)">
+      <rect x="0" y="0" width="350" height="110" rx="8" fill="#0F172A" stroke="#1E293B" stroke-width="1"/>
+      <circle cx="20" cy="24" r="5" fill="#34D399"/>
+      <text class="card-title" x="34" y="28" fill="#F8FAFC">Deterministic Scientific Core</text>
+      <text class="card-text" x="20" y="52">Epley 1RM and 56-day slopes are pure math.</text>
+      <text class="card-text" x="20" y="70">Rolling-origin eval prevents temporal data leakage.</text>
+      <text class="card-text" x="20" y="88">AI only at the edges: parse, forecast, narrate.</text>
+    </g>
+
+    <!-- Card 3 -->
+    <g transform="translate(770, 0)">
+      <rect x="0" y="0" width="350" height="110" rx="8" fill="#0F172A" stroke="#1E293B" stroke-width="1"/>
+      <circle cx="20" cy="24" r="5" fill="#FBBF24"/>
+      <text class="card-title" x="34" y="28" fill="#F8FAFC">Actionable Real-World Output</text>
+      <text class="card-text" x="20" y="52">Inverts e1RM to 2.5kg plate loading visuals.</text>
+      <text class="card-text" x="20" y="70">10s audio briefing for chalky hands via ElevenLabs.</text>
+      <text class="card-text" x="20" y="88">Strict regex numeric guard prevents hallucination.</text>
+    </g>
+  </g>
+</svg>

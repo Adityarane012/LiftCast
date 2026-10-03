@@ -47,33 +47,9 @@ LiftCast features a modern dark glassmorphic Streamlit interface designed for qu
 
 ## 4. How I Built It
 
-### The Architectural Separation: AI at the Edges, Math at the Core
-```
-       Free text note ("bench 60 8 8 7, last set died")
-                           │
-                           ▼
-                  parser.py (Local Gemma)
-                     [Enforced JSON Schema]
-                           │
-                           ▼
-                  db.py (Local SQLite)
-                 [Sessions & Sets Schema]
-                           │
-                           ▼
-                  metrics.py (Pure Math)
-             [Epley e1RM, Leakage-Free Features]
-               ┌───────────┴───────────┐
-               ▼                       ▼
-          forecast.py              detect.py
-        (Local TabPFN)      (56-Day Slope Stall Rule)
-               └───────────┬───────────┘
-                           ▼
-                  coach.py (Gemma Narrator)
-                  [Strict Numeric Guard]
-                           │
-                           ▼
-                  app.py (Streamlit UI)
-```
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/architecture.svg" alt="LiftCast System Architecture" width="100%">
+</p>
 
 ### Local Hardware Profile
 - **Laptop:** RTX 3050 Laptop GPU (4 GB VRAM) + Intel CPU.
@@ -82,6 +58,10 @@ LiftCast features a modern dark glassmorphic Streamlit interface designed for qu
 
 ### The 40-Point Rolling-Origin Evaluation
 We rejected arbitrary train/test splits that cause temporal leakage. Instead, we executed a rolling-origin backtest across the last 8 sessions for 5 key lifts (40 out-of-sample predictions):
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/evaluation_protocol.svg" alt="Rolling Origin Evaluation Protocol" width="100%">
+</p>
 
 | Lift | Test Sessions ($n$) | Last Value MAE (kg) | Trend-5 MAE (kg) | TabPFN MAE (kg) | Winner |
 |---|---|---|---|---|---|
@@ -98,6 +78,11 @@ We rejected arbitrary train/test splits that cause temporal leakage. Instead, we
 - TabPFN scales lifts as ratios to prior bests (`e1rm / best_so_far`), allowing cross-lift generalization and calibrated 95% uncertainty bands without retraining.
 
 ### Honest Failures & Postmortems
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/stall_detection.svg" alt="Stall Detection Empirical Comparison" width="100%">
+</p>
+
 1. **The Flawed "PR in 21 Days" Stall Rule:** Our initial hypothesis was that lacking a PR within 3–4 sessions signified a stall. On real data, this rule flagged **22% to 78% of all workouts**! During a 6-month stretch where Bench rose from 42 kg to 64 kg, it flagged 61% of sessions as "stalled". We replaced it with a least-squares linear slope over 56 days with $m \ge 4$ sessions, which cleanly detects genuine plateaus without false positives.
 2. **LLM Number Hallucinations:** Early prompt attempts had Gemma suggesting unprompted weights and supplement doses. We solved this with a strict architectural contract: code builds the JSON stats payload, Gemma narrates in $\le 120$ words, and a regex numeric guard audits every digit. If an unapproved number is detected, it falls back to a deterministic template.
 

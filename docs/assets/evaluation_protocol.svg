@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="evalBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080C14"/>
+      <stop offset="50%" stop-color="#0E1524"/>
+      <stop offset="100%" stop-color="#080C14"/>
+    </linearGradient>
+    <pattern id="evalDots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#1E293B" opacity="0.6"/>
+    </pattern>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10B981"/>
+    </marker>
+  </defs>
+
+  <style>
+    .etitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 18px; font-weight: 700; fill: #F8FAFC; }
+    .esub { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12px; fill: #94A3B8; }
+    .mono { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 11px; }
+    .label { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; font-weight: 600; fill: #CBD5E1; }
+  </style>
+
+  <rect width="1100" height="420" rx="12" fill="url(#evalBg)"/>
+  <rect width="1100" height="420" rx="12" fill="url(#evalDots)"/>
+  <rect width="1100" height="420" rx="12" fill="none" stroke="#1E293B" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <g transform="translate(35, 35)">
+    <text class="etitle" x="0" y="0">📊 40-Point Rolling-Origin Backtest Protocol (§7.4)</text>
+    <text class="esub" x="0" y="18">Zero temporal data leakage • 8 out-of-sample points across 5 core lifts</text>
+  </g>
+
+  <!-- Comparison Split: Random Split vs Rolling Origin -->
+  <g transform="translate(35, 80)">
+    <!-- Bad Split: Random K-Fold -->
+    <rect x="0" y="0" width="490" height="295" rx="8" fill="#111827" stroke="#EF4444" stroke-opacity="0.4" stroke-width="1.5"/>
+    <rect x="15" y="15" width="130" height="22" rx="4" fill="#7F1D1D"/>
+    <text class="mono" x="80" y="30" fill="#FCA5A5" text-anchor="middle" font-weight="700">❌ RANDOM TRAIN/TEST</text>
+    <text class="esub" x="15" y="55">Flawed time-series methodology: leaks future workouts into past training.</text>
+
+    <!-- Visual timeline for random split -->
+    <g transform="translate(15, 80)">
+      <line x1="0" y1="20" x2="450" y2="20" stroke="#374151" stroke-width="4"/>
+      <!-- Mixed dots -->
+      <circle cx="20" cy="20" r="7" fill="#3B82F6"/>
+      <circle cx="60" cy="20" r="7" fill="#EF4444"/>
+      <circle cx="100" cy="20" r="7" fill="#3B82F6"/>
+      <circle cx="140" cy="20" r="7" fill="#EF4444"/>
+      <circle cx="180" cy="20" r="7" fill="#3B82F6"/>
+      <circle cx="220" cy="20" r="7" fill="#3B82F6"/>
+      <circle cx="260" cy="20" r="7" fill="#EF4444"/>
+      <circle cx="300" cy="20" r="7" fill="#3B82F6"/>
+      <circle cx="340" cy="20" r="7" fill="#3B82F6"/>
+      <circle cx="380" cy="20" r="7" fill="#EF4444"/>
+      <circle cx="420" cy="20" r="7" fill="#3B82F6"/>
+
+      <text class="mono" x="0" y="55" fill="#EF4444">• Blue = Train rows, Red = Test rows</text>
+      <text class="esub" x="0" y="75" fill="#9CA3AF">Future strength gains (e.g. Month 4) artificially leak</text>
+      <text class="esub" x="0" y="93" fill="#9CA3AF">into earlier forecasts, invalidating evaluation integrity.</text>
+    </g>
+
+    <!-- Good Split: Rolling-Origin Walk Forward -->
+    <g transform="translate(520, 0)">
+      <rect x="0" y="0" width="510" height="295" rx="8" fill="#111827" stroke="#10B981" stroke-opacity="0.6" stroke-width="1.5"/>
+      <rect x="15" y="15" width="165" height="22" rx="4" fill="#065F46"/>
+      <text class="mono" x="97" y="30" fill="#A7F3D0" text-anchor="middle" font-weight="700">✓ ROLLING-ORIGIN EVAL</text>
+      <text class="esub" x="15" y="55">Strict causal integrity: prior sessions only. Walk forward step-by-step.</text>
+
+      <!-- Walk forward steps -->
+      <g transform="translate(15, 75)">
+        <!-- Step 1 -->
+        <text class="mono" x="0" y="15" fill="#94A3B8">t = 1</text>
+        <rect x="40" y="5" width="220" height="14" rx="3" fill="#059669" fill-opacity="0.8"/>
+        <text class="mono" x="150" y="16" fill="#FFFFFF" text-anchor="middle" font-size="9">History &lt; t₁ (Train Context)</text>
+        <circle cx="280" cy="12" r="7" fill="#F59E0B"/>
+        <text class="mono" x="295" y="16" fill="#FBBF24" font-size="9">Predict t₁ (Out-of-sample)</text>
+
+        <!-- Step 2 -->
+        <text class="mono" x="0" y="45" fill="#94A3B8">t = 2</text>
+        <rect x="40" y="35" width="240" height="14" rx="3" fill="#059669" fill-opacity="0.8"/>
+        <text class="mono" x="160" y="46" fill="#FFFFFF" text-anchor="middle" font-size="9">History &lt; t₂ (Includes t₁)</text>
+        <circle cx="300" cy="42" r="7" fill="#F59E0B"/>
+        <text class="mono" x="315" y="46" fill="#FBBF24" font-size="9">Predict t₂</text>
+
+        <!-- Step 8 -->
+        <text class="mono" x="0" y="75" fill="#94A3B8">t = 8</text>
+        <rect x="40" y="65" width="300" height="14" rx="3" fill="#059669" fill-opacity="0.8"/>
+        <text class="mono" x="190" y="76" fill="#FFFFFF" text-anchor="middle" font-size="9">History &lt; t₈ (Full Trailing History)</text>
+        <circle cx="360" cy="72" r="7" fill="#F59E0B"/>
+        <text class="mono" x="375" y="76" fill="#FBBF24" font-size="9">Predict t₈</text>
+
+        <rect x="0" y="100" width="480" height="70" rx="6" fill="#0F172A" stroke="#1E293B" stroke-width="1"/>
+        <text class="label" x="12" y="122">• Target: Ratio to prior best (e1rm / best_prior)</text>
+        <text class="label" x="12" y="140">• 5 Lifts × 8 Sessions = 40 strict test predictions</text>
+        <text class="label" x="12" y="158">• TabPFN evaluated identically against Trend-5 and Last-Value</text>
+      </g>
+    </g>
+  </g>
+</svg>

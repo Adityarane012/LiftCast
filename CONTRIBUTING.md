@@ -59,5 +59,5 @@ Thank you for your interest in contributing to **LiftCast**! We are participatin
 ## Contribution Workflow
 1. Check existing issues or open a new one using the **Feature Request** or **Bug Report** templates.
 2. Fork the repository and create your branch from `main`.
-3. Ensure all 51 tests pass before opening a Pull Request.
+3. Ensure all 58 tests pass before opening a Pull Request.
 4. Follow the checklist in `.github/PULL_REQUEST_TEMPLATE.md`.
