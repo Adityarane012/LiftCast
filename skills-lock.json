@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "ralph-loop-workflow": {
+      "source": "andrelandgraf/fullstackrecipes",
+      "sourceType": "github",
+      "skillPath": "skills/ralph-loop-workflow/SKILL.md",
+      "computedHash": "3657b1d85fb15dab69fea1d1153995ca0cd1438c764550a021f1836f9cae4d35"
+    }
+  }
+}
