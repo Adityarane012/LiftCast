@@ -250,7 +250,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown(
         f"""
-        <div style="font-size:0.8rem; color:#94a3b8;">
+        <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.5rem;">
             <b>Database History:</b><br/>
             • <b>{len(sessions_all)}</b> calendar sessions<br/>
             • <b>{len(history_df_all):,}</b> structured sets stored
@@ -258,6 +258,25 @@ with st.sidebar:
         """,
         unsafe_allow_html=True,
     )
+
+    col_seed, col_clear = st.columns(2)
+    with col_seed:
+        if st.button("⚡ Seed Demo", use_container_width=True, help="Seed 6-month rich workout history across 7 lifts"):
+            with st.spinner("Seeding demo database..."):
+                from liftcast.demo_seed import seed_demo_database
+                res = seed_demo_database(conn, total_weeks=26, clear_existing=True, bodyweight_kg=float(bodyweight_kg))
+                st.success(f"Seeded {res['sessions_created']} sessions ({res['sets_created']} sets)!")
+                time.sleep(0.5)
+                st.rerun()
+
+    with col_clear:
+        if st.button("🗑️ Clear", use_container_width=True, help="Reset workout database"):
+            with conn:
+                conn.execute("DELETE FROM sets")
+                conn.execute("DELETE FROM sessions")
+            st.warning("Database cleared!")
+            time.sleep(0.5)
+            st.rerun()
 
     st.markdown("---")
     page = st.radio(
@@ -632,6 +651,111 @@ elif page == "📈 Lift Progress & Forecast":
     )
 
     st.plotly_chart(fig, use_container_width=True)
+
+    # -------------------------------------------------------------------------
+    # Visual Barbell Plate Loader & Working Weight Target Recommender
+    # -------------------------------------------------------------------------
+    from liftcast.plate_calculator import (
+        calculate_plates,
+        calculate_working_weight_from_e1rm,
+        snap_to_plate_increment,
+    )
+
+    st.markdown("### 🏋️ Barbell Plate Loader & Gym Target Recommender")
+    st.markdown(
+        "<div style='font-size:0.85rem; color:#94a3b8; margin-bottom:1rem;'>Inverts TabPFN's e1RM forecast into an actionable gym working weight (snapped to standard 2.5 kg plates) with exact plate counts per barbell sleeve.</div>",
+        unsafe_allow_html=True,
+    )
+
+    # Invert TabPFN e1RM to an 8-rep working target
+    default_working_weight = (
+        calculate_working_weight_from_e1rm(forecast_res.point_kg, target_reps=8, increment=2.5)
+        if forecast_res.point_kg > 0
+        else 60.0
+    )
+    if is_currently_stalled:
+        deload_target = snap_to_plate_increment(default_working_weight * 0.90, increment=2.5)
+        st.info(
+            f"💡 **Stall-Aware Deload Target:** Since {selected_lift} has plateaued, consider a technical deload at **{deload_target:.1f} kg** (90% of working weight) or hold **{default_working_weight:.1f} kg** focusing on bar speed and technique."
+        )
+
+    col_target, col_bar, col_reps = st.columns([2, 1, 1])
+    with col_target:
+        target_wt = st.number_input(
+            "Target Barbell Weight (kg)",
+            min_value=15.0,
+            max_value=350.0,
+            value=float(default_working_weight) if default_working_weight >= 20.0 else 60.0,
+            step=2.5,
+            help="Total barbell weight (bar + plates on both sides).",
+        )
+    with col_bar:
+        bar_wt = st.selectbox(
+            "Barbell Type",
+            options=[20.0, 15.0],
+            format_func=lambda x: f"{int(x)} kg (Olympic)" if x == 20 else f"{int(x)} kg (Technique)",
+            index=0,
+        )
+    with col_reps:
+        reps_choice = st.selectbox("Target Reps", options=[3, 5, 6, 8, 10, 12], index=3)
+
+    loading = calculate_plates(target_wt, bar_weight_kg=bar_wt)
+
+    # Render Visual Barbell Graphic with Olympic Plates
+    sleeve_plates_html = []
+    for item in loading.plates_visual:
+        bg_col = item["color"]
+        txt_col = item.get("text_color", "#ffffff")
+        h_px = item["height_px"]
+        w_px = item["width_px"]
+        lbl = item["label"]
+        sleeve_plates_html.append(
+            f"""<div style="background:{bg_col}; color:{txt_col}; height:{h_px}px; width:{w_px}px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; border:1px solid rgba(0,0,0,0.3); box-shadow:0 4px 6px rgba(0,0,0,0.4); writing-mode:vertical-rl; text-orientation:mixed; cursor:pointer;" title="{item['weight']} kg plate">{lbl}</div>"""
+        )
+
+    plates_combined_html = "".join(sleeve_plates_html) if sleeve_plates_html else "<div style='color:#64748b; font-size:0.85rem; font-style:italic;'>No plates (empty bar)</div>"
+
+    plate_pills = []
+    for p_weight, count in sorted(loading.plate_counts.items(), reverse=True):
+        plate_pills.append(f"<b>{count}×</b> {p_weight} kg")
+    per_side_str = ", ".join(plate_pills) if plate_pills else "None (Empty Barbell)"
+
+    st.markdown(
+        f"""
+        <div class="glass-panel" style="margin-top:0.75rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <div>
+                    <span style="font-size:1.1rem; font-weight:800; color:#f8fafc;">Barbell Sleeve Breakdown</span>
+                    <span style="font-size:0.85rem; color:#94a3b8; margin-left:0.5rem;">(Per Side: {loading.weight_per_side_loaded:.2f} kg)</span>
+                </div>
+                <div>
+                    <span class="badge badge-emerald">Total: {loading.total_loaded_kg:.1f} kg {"✓ Exact Match" if loading.is_exact else f"(Remainder: {loading.remainder_kg} kg)"}</span>
+                </div>
+            </div>
+
+            <!-- Barbell Visual Graphic -->
+            <div style="display:flex; align-items:center; justify-content:center; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:2rem 1.5rem; min-height:160px; overflow-x:auto;">
+                <!-- Left Shaft (Main Grip) -->
+                <div style="height:18px; width:90px; background:linear-gradient(180deg, #94a3b8 0%, #475569 50%, #334155 100%); border-radius:4px 0 0 4px; box-shadow:inset 0 1px 2px rgba(255,255,255,0.2);"></div>
+                <!-- Inner Collar -->
+                <div style="height:80px; width:16px; background:linear-gradient(180deg, #cbd5e1 0%, #64748b 50%, #475569 100%); border-radius:3px; box-shadow:0 2px 4px rgba(0,0,0,0.5);"></div>
+                <!-- Plates on Sleeve -->
+                <div style="display:flex; align-items:center; gap:3px; margin:0 4px;">
+                    {plates_combined_html}
+                </div>
+                <!-- Outer Sleeve End -->
+                <div style="height:22px; width:70px; background:linear-gradient(180deg, #94a3b8 0%, #475569 50%, #1e293b 100%); border-radius:0 4px 4px 0;"></div>
+            </div>
+
+            <!-- Detailed Plate List -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding-top:0.75rem; border-top:1px solid rgba(255,255,255,0.06); font-size:0.85rem;">
+                <div style="color:#cbd5e1;"><b>Plates per Sleeve:</b> {per_side_str}</div>
+                <div style="color:#94a3b8;">Bar: <b>{loading.bar_weight_kg:.0f} kg</b> • Working Set e1RM: <b>{calculate_epley_e1rm(target_wt, reps_choice):.1f} kg</b></div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 # -----------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 > **A local-first AI workout logger and progress forecaster, built for my friend Armaan.**  
 > *Entry for the DEV Hacktoberfest Weekend Challenge: "Build for a Friend"*
 
-[![Tests: Passing](https://img.shields.io/badge/pytest-29%20passed-10b981?style=for-the-badge&logo=pytest)](file:///c:/Users/Aditya%20Rane/Downloads/Hacktoberfest26/tests/)
+[![Tests: Passing](https://img.shields.io/badge/pytest-51%20passed-10b981?style=for-the-badge&logo=pytest)](file:///c:/Users/Aditya%20Rane/Downloads/Hacktoberfest26/tests/)
 [![Architecture: Archify](https://img.shields.io/badge/Architecture-Archify%20Interactive-38bdf8?style=for-the-badge)](file:///c:/Users/Aditya%20Rane/Downloads/Hacktoberfest26/docs/assets/liftcast_architecture.html)
 [![Privacy: 100% Local](https://img.shields.io/badge/Privacy-100%25%20Offline%20%2F%20No%20Cloud-8b5cf6?style=for-the-badge)](file:///c:/Users/Aditya%20Rane/Downloads/Hacktoberfest26/CLAUDE.md)
 
@@ -24,7 +24,9 @@ Because he never logs, he has no answer to the most important question in streng
 1. **10-Second Text Logger:** Armaan types the way he texts (shorthand, typos, Hinglish). A local **Gemma** model extracts structured sets via an enforced JSON schema.
 2. **Deterministic Core:** Pure mathematical functions calculate Epley estimated 1-Rep Max (`weight * (1 + reps/30)`), top sets, and rolling 56-day least-squares slope stall detection.
 3. **In-Context Tabular Forecaster:** **TabPFN** (running locally on CPU) forecasts next-session performance with 95% prediction intervals.
-4. **Weekly AI Coach with Numeric Guard:** Gemma narrates weekly progress under a strict deterministic guard that audits every number against the computed stats payload.
+4. **Visual Barbell Plate Loader:** Inverts the TabPFN e1RM forecast into an actionable working weight snapped to 2.5 kg plates, complete with a visual barbell sleeve graphic showing the exact 20kg/10kg/5kg/2.5kg/1.25kg plates per side.
+5. **Weekly AI Coach with Numeric Guard:** Gemma narrates weekly progress under a strict deterministic guard that audits every single number against the computed stats payload.
+6. **1-Click Demo Seeder:** Reviewers and fresh clones can instantly seed a 6-month rich history across 7 lifts with genuine plateaus and progressions.
 
 ---
 

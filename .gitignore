@@ -32,6 +32,9 @@ data/raw/
 *.db
 *.sqlite
 *.sqlite3
+liftoff_workout_data.csv
+*liftoff*.csv
+data/*.csv
 
 # Node / JS
 node_modules/

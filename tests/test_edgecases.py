@@ -346,3 +346,56 @@ def test_db_resolve_exercise_case_insensitivity_and_empty():
     assert resolve_exercise(conn, "BENCH PRESS") == "Bench Press"
     assert resolve_exercise(conn, "bOr") == "Bent Over Row"
     assert resolve_exercise(conn, "non_existent_exercise_12345") is None
+
+
+# =============================================================================
+# 7. PLATE CALCULATOR & DEMO SEED TESTS
+# =============================================================================
+
+def test_plate_calculator_standard_weights():
+    """Calculates exact plate loading per sleeve for standard bar."""
+    from liftcast.plate_calculator import (
+        calculate_plates,
+        calculate_working_weight_from_e1rm,
+        snap_to_plate_increment,
+    )
+
+    # 1. 100 kg on 20 kg bar: (100 - 20) / 2 = 40 kg per side -> 2x20kg
+    p1 = calculate_plates(100.0, bar_weight_kg=20.0)
+    assert p1.is_exact is True
+    assert p1.weight_per_side_loaded == 40.0
+    assert p1.plate_counts == {20.0: 2}
+
+    # 2. 67.5 kg on 20 kg bar: (67.5 - 20) / 2 = 23.75 kg per side -> 1x20kg, 1x2.5kg, 1x1.25kg
+    p2 = calculate_plates(67.5, bar_weight_kg=20.0)
+    assert p2.is_exact is True
+    assert p2.weight_per_side_loaded == 23.75
+    assert p2.plate_counts == {20.0: 1, 2.5: 1, 1.25: 1}
+
+    # 3. Target <= bar weight
+    p3 = calculate_plates(20.0, bar_weight_kg=20.0)
+    assert p3.is_exact is True
+    assert p3.weight_per_side_loaded == 0.0
+    assert len(p3.plates_per_side) == 0
+
+    # 4. Snap to 2.5 kg increments
+    assert snap_to_plate_increment(61.3) == 62.5
+    assert snap_to_plate_increment(60.1) == 60.0
+
+    # 5. Inverting e1RM to working weight: 100 kg e1RM for 8 reps
+    # 100 / (1 + 8/30) = 100 / 1.2667 = 78.95 -> 80.0 kg
+    w = calculate_working_weight_from_e1rm(100.0, target_reps=8, increment=2.5)
+    assert w == 80.0
+
+
+def test_demo_seed_database_execution():
+    """Verifies that seed_demo_database creates sessions and sets across all core lifts."""
+    from liftcast.demo_seed import seed_demo_database
+
+    mem_conn = get_connection(":memory:")
+    stats = seed_demo_database(mem_conn, total_weeks=12, clear_existing=True)
+
+    assert stats["sessions_created"] > 10
+    assert stats["sets_created"] > 30
+    assert "Bench Press" in stats["lifts_seeded"]
+    assert "Deadlift" in stats["lifts_seeded"]
