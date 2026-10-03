@@ -1,6 +1,6 @@
 # ⚡ LiftCast
 
-> **A local-first AI workout logger and progress forecaster, built for my friend Armaan.**  
+> **A local-first AI workout logger and progress forecaster**  
 > *Entry for the DEV Hacktoberfest Weekend Challenge: "Build for a Friend"*
 
 [![CI](https://img.shields.io/github/actions/workflow/status/Adityarane012/LiftCast/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Adityarane012/LiftCast/actions)
