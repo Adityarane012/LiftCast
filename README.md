@@ -4,7 +4,7 @@
 > *Entry for the DEV Hacktoberfest Weekend Challenge: "Build for a Friend"*
 
 [![CI](https://img.shields.io/github/actions/workflow/status/Adityarane012/LiftCast/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Adityarane012/LiftCast/actions)
-[![Tests: Passing](https://img.shields.io/badge/pytest-58%20passed-10b981?style=for-the-badge&logo=pytest)](tests/)
+[![Tests: Passing](https://img.shields.io/badge/pytest-59%20passed-10b981?style=for-the-badge&logo=pytest)](tests/)
 [![Python: 3.11 | 3.12 | 3.13](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://github.com/Adityarane012/LiftCast)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![Privacy: 100% Local](https://img.shields.io/badge/Privacy-100%25%20Offline%20%2F%20No%20Cloud-8b5cf6?style=for-the-badge)](CLAUDE.md)
@@ -130,52 +130,236 @@ This achieved a **2.1x discrimination ratio** on genuine plateaus while correctl
 | **Best Use of Gemma** | Runs locally via Ollama (`gemma4:e2b` / `gemma4:e4b`). Uses Ollama's structured JSON schema to parse free-form shorthand and Hinglish logs. Generates weekly coach recaps with an enforced regex numeric guard against hallucinated stats. |
 | **Best Use of TabPFN** | Runs locally on CPU. In-context prior predicts next-session top-set e1RM scaled as a ratio to historical best across disparate lifts, providing calibrated 95% uncertainty intervals evaluated via a 40-point rolling-origin backtest. |
 | **Best Use of ElevenLabs** | Hands-free audio coaching for lifters with chalky hands. Inverts verified stats into a 10-second gym earbud briefing. Strict privacy guarantee: only the 2-sentence audited summary is sent to the TTS endpoint (zero health notes, timestamps, or database logs). Native browser SpeechSynthesis fallback for 100% offline environments. |
-| **Best Use of GitHub** | Comprehensive CI matrix testing across Python 3.11, 3.12, and 3.13 on GitHub Actions. Automated verification of 58 test suites, PR templates with strict data privacy auditing, issue templates, and open-source contribution governance. |
+| **Best Use of GitHub** | Comprehensive CI matrix testing across Python 3.11, 3.12, and 3.13 on GitHub Actions. Automated verification of 59 tests across unit, integration, and edge-case suites, PR templates with strict data privacy auditing, issue templates, and open-source contribution governance. |
 
 ---
 
 ## 🚀 Quick Start & Installation
 
-### 1. Prerequisites
-* **Python:** 3.11+ (tested on Python 3.11, 3.12, and 3.13)
-* **Ollama:** Installed and running locally with Gemma:
-  ```bash
-  ollama pull gemma4:e2b
-  ```
+LiftCast runs entirely on your local machine using SQLite, CPU PyTorch, TabPFN, and local Gemma via Ollama. Follow these step-by-step instructions to get the application running in under 5 minutes.
 
-### 2. Setup Virtual Environment
+---
+
+### 1. System Requirements & Prerequisites
+
+* **Operating System:** Windows 10/11, macOS (Apple Silicon or Intel), or Linux (Ubuntu 22.04+).
+* **Python:** Version `3.11`, `3.12`, or `3.13` (64-bit).
+* **Git:** Installed and available on your PATH.
+* **Ollama (Optional, Recommended):** For free-form text parsing and AI coach generation. Download from [ollama.com](https://ollama.com).  
+  *(Note: If Ollama is not installed or offline, LiftCast automatically falls back to deterministic rule-based parsing.)*
+
+---
+
+### 2. Clone the Repository
+
+Clone the project from GitHub and navigate into the root directory:
+
 ```bash
-# Clone the repository
 git clone https://github.com/Adityarane012/LiftCast.git
 cd LiftCast
+```
 
-# Create and activate virtual environment
+---
+
+### 3. Create & Activate Virtual Environment
+
+Isolate project dependencies within a local virtual environment:
+
+#### Windows (PowerShell)
+```powershell
+# Create virtual environment
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1   # Windows PowerShell
-# or: source .venv/bin/activate # Linux / macOS
 
-# Install dependencies (CPU PyTorch + requirements)
-pip install --upgrade pip
+# If PowerShell blocks script execution, run this once in your current session:
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+# Activate the environment
+.\.venv\Scripts\Activate.ps1
+```
+
+#### Linux & macOS (Bash / Zsh)
+```bash
+# Create virtual environment
+python3 -m venv .venv
+
+# Activate the environment
+source .venv/bin/activate
+```
+
+---
+
+### 4. Install Dependencies
+
+> **Fast CPU Install Tip:** Standard `pip install torch` downloads ~2.5 GB of CUDA packages. Installing the PyTorch CPU wheel first cuts the download to ~150 MB and saves disk space:
+
+```bash
+# Upgrade pip to latest version
+python -m pip install --upgrade pip
+
+# Install lightweight PyTorch CPU build
 pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+# Install remaining requirements (TabPFN, Streamlit, Ollama client, Plotly)
 pip install -r requirements.txt
 ```
 
-### 3. Launch the Streamlit App
+---
+
+### 5. Setup Local LLM (Ollama + Gemma)
+
+LiftCast uses **Gemma** locally via Ollama with strict JSON schema constraints.
+
+1. Start the Ollama background daemon if it is not already running:
+   ```bash
+   ollama serve
+   ```
+2. Pull the recommended lightweight Gemma model in a separate terminal:
+   ```bash
+   ollama pull gemma4:e2b
+   ```
+   *(Alternative models: `ollama pull gemma3:1b` for low-RAM machines, or `ollama pull gemma4:e4b` for expanded reasoning).*
+
+If Ollama is offline or uninstalled, LiftCast will inform you in the UI and automatically switch to rule-based heuristic parsing without failing.
+
+---
+
+### 6. Environment Variables (Optional)
+
+All core functions (workout logging, SQLite storage, TabPFN forecasting, barbell sleeve visualization) work **100% offline without any API keys**.
+
+To enable studio-quality ElevenLabs voice playback or point to a remote Ollama server:
+
 ```bash
-# Set PYTHONPATH and run Streamlit
-$env:PYTHONPATH="src"; streamlit run app.py
-# or Linux/macOS: PYTHONPATH=src streamlit run app.py
+# Copy the example environment template
+cp .env.example .env
 ```
-Open **[http://localhost:8501](http://localhost:8501)** in your browser.
 
-> 💡 **First Time?** Click **"Seed Rich 6-Month Demo DB"** in the sidebar to populate genuine plateaus and progressions across 7 lifts in 1 click!
+| Variable | Default | Purpose |
+|---|---|---|
+| `ELEVENLABS_API_KEY` | *(None)* | Generates studio audio briefings. If omitted, LiftCast uses browser native `SpeechSynthesis`. |
+| `OLLAMA_HOST` | `http://localhost:11434` | Ollama service endpoint (useful for WSL2, remote servers, or Docker). |
 
-### 4. Run the Pytest Test Suite
+On Windows PowerShell:
+```powershell
+$env:ELEVENLABS_API_KEY="your_api_key_here"
+```
+On Linux / macOS:
 ```bash
+export ELEVENLABS_API_KEY="your_api_key_here"
+```
+
+---
+
+### 7. Launch the Streamlit Web Application
+
+Run Streamlit with the source directory included in `PYTHONPATH`:
+
+#### Windows (PowerShell)
+```powershell
+$env:PYTHONPATH="src"
+streamlit run app.py
+```
+
+#### Linux & macOS (Bash / Zsh)
+```bash
+PYTHONPATH=src streamlit run app.py
+```
+
+Once started, Streamlit will display the local URL:
+```text
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.x.x:8501
+```
+
+Open **[http://localhost:8501](http://localhost:8501)** in your web browser.
+
+#### Seeding 6 Months of Realistic Workout Data
+To explore charts, forecasts, and stall warnings immediately without manual logging:
+* Click **"Seed Rich 6-Month Demo DB"** in the sidebar.  
+* This populates SQLite (`data/liftcast.db`) with 26 weeks of structured workouts across 7 compound lifts, featuring realistic plateaus, deloads, and progression curves.
+
+---
+
+### 8. Run Verification & Benchmarks
+
+#### Run Full Test Suite (59 Tests)
+Execute all unit, integration, and edge-case tests:
+
+```bash
+# Windows (PowerShell)
 $env:PYTHONPATH="src"; pytest -v
-# or Linux/macOS: PYTHONPATH=src pytest -v
+
+# Linux / macOS
+PYTHONPATH=src pytest -v
 ```
-All **58 tests** pass in ~18 seconds.
+All **59 tests** pass cleanly in ~9 seconds.
+
+#### Run 40-Point Rolling-Origin Backtest
+Evaluate TabPFN versus baseline forecasters (Last Value, Trend-5 Linear Regression) on historical out-of-sample data:
+
+```bash
+# Windows (PowerShell)
+$env:PYTHONPATH="src"; python scripts/run_eval.py
+
+# Linux / macOS
+PYTHONPATH=src python scripts/run_eval.py
+```
+
+---
+
+### 9. 1-Click Cloud Sandbox (GitHub Codespaces)
+
+You can launch LiftCast directly in your browser without local installation:
+
+1. Click **Code** > **Codespaces** > **Create codespace on main**.
+2. The pre-configured `.devcontainer/devcontainer.json` environment will automatically set up Python 3.12, install PyTorch CPU, and install all dependencies.
+3. Once built, open a terminal in Codespaces and run:
+   ```bash
+   PYTHONPATH=src streamlit run app.py --server.port 8501 --server.address 0.0.0.0
+   ```
+4. Click the forwarded port notification to view the running app.
+
+---
+
+### 10. Troubleshooting & FAQ
+
+<details>
+<summary><b>ModuleNotFoundError: No module named 'src' or 'liftcast'</b></summary>
+
+Ensure `PYTHONPATH` includes the `src` directory before launching the app or tests:
+* Windows PowerShell: `$env:PYTHONPATH="src"; streamlit run app.py`
+* Linux / macOS: `PYTHONPATH=src streamlit run app.py`
+</details>
+
+<details>
+<summary><b>PowerShell: "cannot be loaded because running scripts is disabled on this system"</b></summary>
+
+Run this command once in your current PowerShell window to allow virtual environment activation scripts:
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+</details>
+
+<details>
+<summary><b>Ollama connection refused or model not found</b></summary>
+
+1. Confirm Ollama is running: visit `http://localhost:11434` or run `curl http://localhost:11434/api/tags`.
+2. Check available models: `ollama list`.
+3. If running Ollama inside WSL2 and LiftCast on Windows, set:
+   ```powershell
+   $env:OLLAMA_HOST="http://localhost:11434"
+   ```
+4. Remember that LiftCast has a built-in heuristic regex parser that works even when Ollama is offline.
+</details>
+
+<details>
+<summary><b>PyTorch installation takes too long or runs out of space</b></summary>
+
+Do not run plain `pip install torch` as it downloads several gigabytes of NVIDIA CUDA runtime packages. Always pass the CPU index URL:
+```bash
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+</details>
 
 ---
 
