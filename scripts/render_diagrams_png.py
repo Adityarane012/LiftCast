@@ -51,7 +51,7 @@ def create_architecture_diagram(output_path: Path) -> None:
         ax.text(x + 0.15, y + 0.2, sublabel, fontsize=8.5, color="#94A3B8", family="sans-serif")
 
     # Column 1: Inputs
-    draw_box(0.9, 5.2, 2.3, 1.5, "Armaan (User)", "Informal 10s text log\n'bench 60 8 8 7'", "INPUT", "#111827", "#475569", "#94A3B8")
+    draw_box(0.9, 5.2, 2.3, 1.5, "Lifter (User)", "Informal 10s text log\n'bench 60 8 8 7'", "INPUT", "#111827", "#475569", "#94A3B8")
     draw_box(0.9, 2.4, 2.3, 1.5, "importer.py", "Liftoff CSV Sanitizer\nStripped health notes", "SANITIZER", "#111827", "#475569", "#EF4444")
 
     # Column 2: Parser & DB
@@ -196,8 +196,8 @@ def create_plate_loader_diagram(output_path: Path) -> None:
     card = patches.FancyBboxPatch((0.6, 0.4), 13.8, 1.2, boxstyle="round,pad=0.1,rounding_size=0.15", linewidth=1, edgecolor="#1E293B", facecolor="#111827")
     ax.add_patch(card)
     ax.text(0.9, 1.15, "GYM FLOOR USABILITY: ZERO TOUCH REQUIRED", fontsize=11, fontweight="bold", color="#FBBF24")
-    ax.text(0.9, 0.82, "Armaan doesn't have to fiddle with phone sliders or mental arithmetic with chalky hands between heavy sets.", fontsize=9.5, color="#CBD5E1")
-    ax.text(0.9, 0.55, "ElevenLabs voice coach speaks directly into his earbuds: 'Next bench target: 65 kg for 8 reps. Load one 20 and one 2.5 on each side.'", fontsize=9.5, color="#94A3B8")
+    ax.text(0.9, 0.82, "You don't have to fiddle with phone sliders or mental arithmetic with chalky hands between heavy sets.", fontsize=9.5, color="#CBD5E1")
+    ax.text(0.9, 0.55, "ElevenLabs voice coach speaks directly into earbuds: 'Next bench target: 65 kg for 8 reps. Load one 20 and one 2.5 on each side.'", fontsize=9.5, color="#94A3B8")
 
     plt.tight_layout()
     plt.savefig(output_path, dpi=300, facecolor=fig.get_facecolor(), edgecolor="none")

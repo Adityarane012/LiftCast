@@ -1,8 +1,8 @@
 """ElevenLabs Voice Coach & Audio Briefing module for LiftCast.
 
-Built for the "Build for a Friend" challenge: when Armaan finishes his final set,
-his hands are chalky and he's re-racking weights. Rather than reading a screen,
-he hears a 10-second punchy voice briefing through his gym earbuds.
+Built for the "Build for a Friend" challenge: when my friend finishes their final set,
+their hands are chalky and they're re-racking weights. Rather than reading a screen,
+they hear a 10-second punchy voice briefing through gym earbuds.
 
 Privacy Guarantee:
 - Only the 2-sentence, already-sanitized coach script is sent to the TTS API.
@@ -39,7 +39,7 @@ class VoiceResult:
     error_message: Optional[str] = None
 
 
-def build_audio_briefing_script(payload: dict[str, Any], user_name: str = "Armaan") -> str:
+def build_audio_briefing_script(payload: dict[str, Any], user_name: str = "Friend") -> str:
     """Build a punchy, 2-sentence voice script from the audited stats payload.
     
     Guaranteed: Every number is derived from the payload to prevent hallucination.

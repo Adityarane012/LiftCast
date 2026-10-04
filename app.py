@@ -1,6 +1,6 @@
 """LiftCast — Local-First AI Workout Logger & Progress Forecaster.
 
-Built for Armaan for the DEV Hacktoberfest 2026 Challenge ("Build for a Friend").
+Built for a friend for the DEV Hacktoberfest 2026 Challenge ("Build for a Friend").
 Local Gemma parses free text; local TabPFN forecasts progress; deterministic core detects stalls.
 100% offline, zero cloud egress, strict privacy.
 """
@@ -880,7 +880,7 @@ elif page == "Coach Recap":
         st.subheader("Audio Briefing")
         st.caption("Spoken summary of weekly training numbers.")
 
-        audio_script = build_audio_briefing_script(stats_payload, user_name="Armaan")
+        audio_script = build_audio_briefing_script(stats_payload, user_name="Friend")
         generate_voice_clicked = st.button("Generate Audio Briefing")
 
         if generate_voice_clicked or "voice_briefing_result" in st.session_state:

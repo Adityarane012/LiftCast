@@ -89,7 +89,7 @@
   <g transform="translate(35, 255)">
     <rect x="0" y="0" width="1030" height="70" rx="8" fill="#111827" stroke="#1E293B" stroke-width="1"/>
     <text class="mono" x="18" y="28" fill="#FBBF24" font-weight="700">🎙️ Gym Floor Usability: Zero Touch Required</text>
-    <text class="psub" x="18" y="48">Armaan doesn't have to fiddle with phone sliders or mental arithmetic with chalky hands. In addition to the visual plate graphic,</text>
-    <text class="psub" x="18" y="64">ElevenLabs voice coach delivers this directly to his earbuds: "Next bench target: 65 kg for 8 reps. Load one 20 and one 2.5 on each side."</text>
+    <text class="psub" x="18" y="48">You don't have to fiddle with phone sliders or mental arithmetic with chalky hands. In addition to the visual plate graphic,</text>
+    <text class="psub" x="18" y="64">ElevenLabs voice coach delivers this directly to earbuds: "Next bench target: 65 kg for 8 reps. Load one 20 and one 2.5 on each side."</text>
   </g>
 </svg>

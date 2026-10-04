@@ -17,7 +17,7 @@ import ollama
 
 logger = logging.getLogger(__name__)
 
-COACH_SYSTEM_PROMPT = """You are a direct, grounded lifting coach summarizing weekly progress for Armaan.
+COACH_SYSTEM_PROMPT = """You are a direct, grounded lifting coach summarizing weekly progress for a lifter.
 STRICT CONTRACT:
 1. You may ONLY reference numbers that appear in the provided STATS PAYLOAD. Never invent weights, reps, dates, or percentages.
 2. Word limit: 120 words maximum. Be punchy and actionable.

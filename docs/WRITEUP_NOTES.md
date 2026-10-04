@@ -1,7 +1,7 @@
 # LiftCast — Dev.to Hacktoberfest Write-up Notes
 
 Notes, verified numbers, empirical benchmarks, and honest failures for the submission article:
-**"Building LiftCast: A Local-First AI Workout Forecaster for My Friend Armaan"**
+**"Building LiftCast: A Local-First AI Workout Forecaster Built for a Friend"**
 Challenge: **DEV Hacktoberfest Weekend Challenge: Build for a Friend**
 Target Categories: **Best Use of Gemma**, **Best Use of TabPFN**
 
@@ -10,7 +10,7 @@ Target Categories: **Best Use of Gemma**, **Best Use of TabPFN**
 ## 1. The Story: Why We Built This
 
 ### The User
-Armaan is a regular lifter who has never logged a single session. Every existing logging app (Strong, Hevy, Liftoff, MyFitnessPal) demands structured inputs mid-workout:
+A regular lifter who has never logged a single session. Every existing logging app (Strong, Hevy, Liftoff, MyFitnessPal) demands structured inputs mid-workout:
 1. Tap search.
 2. Select exact exercise variant.
 3. Enter weight.
@@ -18,7 +18,7 @@ Armaan is a regular lifter who has never logged a single session. Every existing
 5. Tap checkmark for set 1.
 6. Repeat for 15–20 sets.
 
-The cognitive friction mid-workout is too high. Armaan texts his friend: *"bench 60 8 8 7, last set died"* or *"aaj lat pulldown 55 pe 10 10 9"*.
+The cognitive friction mid-workout is too high. Instead, he texts a friend: *"bench 60 8 8 7, last set died"* or *"aaj lat pulldown 55 pe 10 10 9"*.
 Because he doesn't log, he can't answer:
 - *Am I actually progressing on this lift over 8 weeks?*
 - *Have I stalled or hit a plateau?*

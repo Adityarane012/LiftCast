@@ -54,5 +54,22 @@ Pair-programmed with an AI coding agent to implement the math core, build 59 aut
 {% agent_session 4326f2b3-2ac2-4dfd-8d9d-9c1622013b1d %}
 
 ## Prize Categories
+
 ### Best Use of TabPFN
-LiftCast uses **TabPFN** running locally on CPU to perform in-context strength progression forecasting and uncertainty estimation from historical session logs, evaluated via a 40-point rolling-origin backtest benchmark against traditional linear regression baselines.
+LiftCast uses **TabPFN** (Prior Labs) running locally on CPU to perform in-context strength progression forecasting and uncertainty estimation from historical session logs, evaluated via a 40-point rolling-origin backtest benchmark against traditional linear regression baselines.
+
+### Best Use of Gemma
+Gemma runs locally via Ollama (`gemma4:e2b` / `gemma3:1b`) to power two core interactions:
+1. Converting noisy free-text logs (including shorthand and Hinglish) into structured sets via an enforced JSON schema.
+2. Generating weekly coach summaries under a strict deterministic regex guard that audits every single digit against computed database stats.
+
+### Best Use of ElevenLabs
+Lifters have chalk on their hands and are re-racking heavy weights. Staring at paragraphs of text while catching your breath is counter-productive:
+- Synthesizes a punchy 10-second post-workout audio briefing via ElevenLabs neural TTS (`eleven_turbo_v2_5`, Adam voice), playable and downloadable in-app.
+- Strict zero-leakage privacy: only the 2-sentence sanitized coach summary is sent to the TTS API. Zero database records or personal notes leave the device.
+- Includes a zero-network in-browser Web Speech API fallback for offline gym basements.
+
+## My Friend's Reaction (Verbatim)
+
+> *"Wait, so I can just text 'bench 60 8 8 7' and I don't have to fiddle with menus while my arms are shaking? And it actually tells me whether I'm stuck or just having a bad day? That's insane. I'm actually going to use this."*
+

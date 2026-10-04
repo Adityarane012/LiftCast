@@ -42,8 +42,8 @@ def stalled_stats_payload():
 
 
 def test_build_audio_briefing_script_normal(sample_stats_payload):
-    script = build_audio_briefing_script(sample_stats_payload, user_name="Armaan")
-    assert "Armaan" in script
+    script = build_audio_briefing_script(sample_stats_payload, user_name="Friend")
+    assert "Friend" in script
     assert "Bench Press" in script
     assert "75" in script
     # Verify script satisfies numeric guard
@@ -53,7 +53,7 @@ def test_build_audio_briefing_script_normal(sample_stats_payload):
 
 
 def test_build_audio_briefing_script_stalled(stalled_stats_payload):
-    script = build_audio_briefing_script(stalled_stats_payload, user_name="Armaan")
+    script = build_audio_briefing_script(stalled_stats_payload, user_name="Friend")
     assert "Lat Pulldown" in script
     assert "62" in script
     assert "deload" in script.lower() or "flattened" in script.lower()
@@ -61,13 +61,13 @@ def test_build_audio_briefing_script_stalled(stalled_stats_payload):
 
 def test_build_audio_briefing_script_empty():
     empty_payload = {"sessions_this_week": 2, "lifts": {}}
-    script = build_audio_briefing_script(empty_payload, user_name="Armaan")
-    assert "Armaan" in script
+    script = build_audio_briefing_script(empty_payload, user_name="Friend")
+    assert "Friend" in script
     assert "2 session" in script
 
 
 def test_synthesize_voice_no_api_key():
-    result = synthesize_voice_elevenlabs("Great workout Armaan!", api_key=None)
+    result = synthesize_voice_elevenlabs("Great workout Friend!", api_key=None)
     assert isinstance(result, VoiceResult)
     assert result.provider == "browser_speech"
     assert result.audio_bytes is None

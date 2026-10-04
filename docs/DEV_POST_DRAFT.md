@@ -1,7 +1,7 @@
 ---
-title: "Building LiftCast: A Local-First AI Workout Forecaster for My Friend Armaan"
+title: "Building LiftCast: A Local-First AI Workout Forecaster Built for a Friend"
 published: false
-description: "A 100% local workout logger that lets my friend Armaan log sets in 10 seconds using Gemma 4, forecasts progress via TabPFN, and detects strength stalls deterministically."
+description: "A 100% local workout logger that lets my friend log sets in 10 seconds using Gemma 4, forecasts progress via TabPFN, and detects strength stalls deterministically."
 tags: hacktoberfest, gemma, tabpfn, elevenlabs, github, python
 canonical_url: https://github.com/Adityarane012/LiftCast
 cover_image: https://raw.githubusercontent.com/Adityarane012/LiftCast/main/docs/assets/liftcast_hero.png
@@ -10,16 +10,16 @@ ai_disclosure_level: some_ai
 
 ## 1. What I Built
 
-My friend **Armaan** is a college student who lifts regularly but has never logged a single session.
+My friend is a college student who lifts regularly but has never logged a single session.
 
-Every existing fitness app (Strong, Hevy, Liftoff) requires tedious mid-workout data entry: tap search, select variant, type weight, type reps, check off set, repeat 15 times. The cognitive friction while catching your breath is simply too high. Armaan logs nothing. Instead, he texts me afterward:
+Every existing fitness app (Strong, Hevy, Liftoff) requires tedious mid-workout data entry: tap search, select variant, type weight, type reps, check off set, repeat 15 times. The cognitive friction while catching your breath is simply too high. Instead, he texts me afterward:
 > *"bench 60 8 8 7, last set died"*  
 > *"aaj lat pulldown 55 pe 10 10 9"*
 
 Because he never logged, he couldn't answer the core question of progressive overload: **"Am I actually progressing, or have I hit a plateau?"**
 
 I built **LiftCast**:
-1. **10-Second Text Logger:** Armaan types the way he texts (shorthand, typos, Hinglish). A local **Gemma** model extracts structured sets via an enforced JSON schema.
+1. **10-Second Text Logger:** Type the way you text (shorthand, typos, Hinglish). A local **Gemma** model extracts structured sets via an enforced JSON schema.
 2. **Deterministic Core:** Pure mathematical functions calculate Epley estimated 1-Rep Max (`weight * (1 + reps/30)`), top sets, and rolling 56-day least-squares slope stall detection.
 3. **In-Context Tabular Forecaster:** **TabPFN** (running on CPU) forecasts next-session performance with 95% prediction intervals.
 4. **Weekly AI Coach with Numeric Guard:** Gemma narrates weekly progress under a strict deterministic guard that audits every single number against the computed stats payload. Zero hallucinated statistics allowed.
@@ -120,6 +120,6 @@ LiftCast leverages GitHub for rigorous open-source engineering and community par
 
 ---
 
-## 7. Armaan's Reaction (Verbatim)
+## 7. My Friend's Reaction (Verbatim)
 
 > *"Wait, so I can just text 'bench 60 8 8 7' and I don't have to fiddle with menus while my arms are shaking? And it actually tells me whether I'm stuck or just having a bad day? That's insane. I'm actually going to use this."*

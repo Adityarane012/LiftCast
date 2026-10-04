@@ -1,6 +1,6 @@
 # ⚡ LiftCast
 
-> **A local-first AI workout logger and strength progress forecaster, built for my friend Armaan.**  
+> **A local-first AI workout logger and strength progress forecaster, built for a friend.**  
 > *Entry for the DEV Hacktoberfest Weekend Challenge: "Build for a Friend"*
 
 [![CI](https://img.shields.io/github/actions/workflow/status/Adityarane012/LiftCast/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Adityarane012/LiftCast/actions)
@@ -17,7 +17,7 @@
 
 ## 🎯 The Real Problem
 
-My friend **Armaan** lifts 4 days a week at our college gym. He has never logged a single session.
+My friend lifts 4 days a week at our college gym. He has never logged a single session.
 
 Every existing tracker (Strong, Hevy, Liftoff) demands structured data entry while you are out of breath:
 1. Tap search.
@@ -26,7 +26,7 @@ Every existing tracker (Strong, Hevy, Liftoff) demands structured data entry whi
 4. Tap checkmark for set 1.
 5. Repeat 15 to 20 times per session.
 
-The friction is too high. Instead, Armaan texts me informal notes on WhatsApp while walking home:
+The friction is too high. Instead, he texts me informal notes on WhatsApp while walking home:
 > *"bench 60 8 8 7, last set died"*  
 > *"aaj lat pulldown 55 pe 10 10 9"*
 
@@ -34,12 +34,12 @@ Because he never logs, he cannot answer the central question of strength trainin
 **"Am I actually progressing on this lift over the last 8 weeks, or have I stalled?"**
 
 **LiftCast** eliminates the data entry barrier entirely:
-* **10-Second Text Logger:** Armaan types exactly how he talks (shorthand, typos, Hinglish). A local **Gemma** model parses the text into structured sets using an enforced JSON schema.
+* **10-Second Text Logger:** Type exactly how you talk (shorthand, typos, Hinglish). A local **Gemma** model parses the text into structured sets using an enforced JSON schema.
 * **Deterministic Core:** Pure mathematical functions calculate Epley estimated 1-Rep Max (`weight * (1 + reps/30)`), isolate daily top sets, and calculate a 56-day least-squares linear slope for stall detection.
 * **In-Context Tabular Forecaster:** **TabPFN** (running on CPU) forecasts next-session performance with 95% prediction intervals.
 * **Visual Barbell Plate Loader:** Inverts the forecasted e1RM into working weight snapped to 2.5 kg plates, rendering a color-coded barbell sleeve graphic (20kg/10kg/5kg/2.5kg/1.25kg plates per side).
 * **Weekly AI Coach with Numeric Guard:** Gemma narrates weekly progress under a strict regex guard that verifies every single digit against computed stats. Zero hallucinated numbers.
-* **Gym Earbud Audio Briefing:** Synthesizes a 10-second post-workout audio briefing via **ElevenLabs** (with offline browser SpeechSynthesis fallback) so Armaan can hear his results without touching his phone with chalky hands.
+* **Gym Earbud Audio Briefing:** Synthesizes a 10-second post-workout audio briefing via **ElevenLabs** (with offline browser SpeechSynthesis fallback) so you can hear results without touching your phone with chalky hands.
 * **1-Click Demo Seeder:** Reviewers can instantly seed 6 months of historical workouts across 7 lifts with authentic plateaus and progressions.
 
 ---
@@ -373,5 +373,5 @@ pip install torch --index-url https://download.pytorch.org/whl/cpu
 
 ## 📝 License & Open Source Governance
 
-Built with care for Armaan and the **DEV Hacktoberfest 2026 Weekend Challenge: "Build for a Friend"**.  
+Built with care for a friend and the **DEV Hacktoberfest 2026 Weekend Challenge: "Build for a Friend"**.  
 Released under the [MIT License](LICENSE).

@@ -1,7 +1,7 @@
 # CLAUDE.md — LiftCast (working name; rename freely)
 
 ## What this is
-A local-first lift logger + progress forecaster, built for one real person: my friend **Armaan**,
+A local-first lift logger + progress forecaster, built for one real person: my friend,
 who lifts but never logs because logging apps are tedious. He types sessions the way he talks
 ("bench 60 8 8 7, last set died"); a local Gemma model structures it, TabPFN forecasts progress,
 and deterministic code detects stalls.
@@ -42,7 +42,7 @@ They would send data off the laptop and weaken the core "runs locally, data stay
   Use Ollama's `format=<JSON schema>` for structured parsing.
 - UI: Streamlit. Storage: SQLite (stdlib `sqlite3`). Tests: pytest.
 
-## Data facts (Liftoff export historical baseline — used to validate; Armaan starts logging now)
+## Data facts (Liftoff export historical baseline — used to validate; lifter starts logging now)
 - Columns: Date, Duration, Workout Name, Exercise Name, Set Order, Weight, Reps, Distance, Seconds, RPE, Notes.
 - 5,559 sets, 308 workout days, Feb 2025 – Oct 2026, 113 exercises.
 - Exclude: Weight == 0, Reps == 0, cardio (Distance > 0 or Seconds > 0). RPE ~empty → don't use.
@@ -83,7 +83,7 @@ Keep `raw_text` for every manually logged set (debugging + honest-failure sectio
 ## Parser
 - Input: free text, shorthand, typos, possibly Hinglish ("aaj bench 60 pe 8 reps").
 - Output (JSON schema): list of `{exercise, weight, unit, reps, sets, note}` → normalized via aliases.
-- Test cases: Armaan's real example lines (TODO: collect 5 from him) + edge cases in `tests/fixtures/`.
+- Test cases: real example shorthand lines (TODO: collect 5 from him) + edge cases in `tests/fixtures/`.
 - If parse confidence is low or exercise unknown, ask the user to confirm instead of guessing.
 
 ## Forecasting
@@ -120,13 +120,13 @@ Keep `raw_text` for every manually logged set (debugging + honest-failure sectio
 ## Schedule
 - Sat: importer → parser → metrics → forecast + baselines + eval numbers.
 - Sun AM: detector, tiers, coach, Streamlit UI.
-- Sun PM: Armaan logs real sessions — record his reaction verbatim; record 1–2 min demo video.
+- Sun PM: Friend logs real sessions — record reaction verbatim; record 1–2 min demo video.
 - Sun night: write the DEV post. Mon by 10:00 IST: submit.
 
 ## Write-up capture (append to docs/WRITEUP_NOTES.md as we go)
 - Real numbers: s/parse, tokens/s, CPU/GPU split, MAE table vs baselines.
 - At least one honest failure and its fix (e.g. a misparse, a rejected stall definition).
-- Screenshots: parser on Armaan's lines, forecast chart, stall flag.
+- Screenshots: parser on real lines, forecast chart, stall flag.
 - "Why open": local, private, ₹0, offline, swappable models, enforced schema. Admit where a closed
   model would likely write smoother text.
 
