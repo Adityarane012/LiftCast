@@ -1,0 +1,1 @@
+My friend lifts 4 days a week but refused to log workouts with chalky hands. I built LiftCast: type raw shorthand, let local Gemma parse the sets, and let TabPFN forecast next week's top set on CPU. 100% offline with zero cloud egress.
